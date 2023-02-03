@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<h1 class="d-flex justify-content-center">TIỆM HOA 1990</h1>
+<tr>
+    <div>
+        <div>
+            <nav class="navbar bg-body-tertiary">
+                <div class="container-fluid">
+                    <button type="submit" class="btn btn-outline-success" data-bs-toggle="modal"
+                            data-bs-target="#exampleModalAdd"
+                            data-bs-whatever="@mdo">Thêm sản phẩm
+                    </button>
+                    <form action="/employee?action=find" method="post" class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Tìm kiếm sản phẩm</button>
+                    </form>
+
+                </div>
+            </nav>
+        </div>
+    </div>
+</tr>
+<body>
+<table class="table table-view table-bordered">
+    <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Mô tả</th>
+        <th>Nhà sản xuất</th>
+        <th>Giá</th>
+        <th>Sửa sản phẩm</th>
+        <th>Xóa sản phẩm</th>
+    </tr>
+    <tr th:each="product,id : ${listProduct}">
+        <td th:text="${id.count}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.describe}"></td>
+        <td th:text="${product.producer}"></td>
+        <td th:text="${product.prices}"></td>
+        <td>
+            <button type="submit" class="btn btn-outline-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalUpdate"
+                    data-bs-whatever="@mdo">Sửa
+            </button>
+
+        </td>
+        <td>
+            <button th:onclick="|idDelete('${product.id}','${product.name}')|"
+                    type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalDelete"
+                    data-bs-whatever="@mdo">Xóa
+            </button>
+        </td>
+    </tr>
+</table>
+
+</body>
+<script>
+    function idDelete(id, name) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("deleteName").innerText = name;
+
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+
+</script>
+
+
+<div class="modal fade" id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/product}" method="post" th:object="${product}">
+                    <fieldset>
+                        <legend>Thêm sản phẩm</legend>
+                        Tên sản phẩm: <input type="text" name="name" placeholder="Name"/><br/>
+                        Mô tả sản phẩm: <input type="text" name="describe" placeholder="Mô tả sản phẩm"/><br/>
+                        Nhà sản xuất: <input type="text" name="producer" placeholder="Nhà sản xuất"/><br/>
+                        Giá: <input type="number" name="prices" placeholder="Giá"/><br/>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelUpdate"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/list" method="get">
+                    <fieldset>
+                        <legend>Sửa thông tin sản phẩm</legend>
+                        ID: <input type="number" name="id" value="${id}" readonly>
+                        Name: <input type="text" name="name" placeholder="Name"/><br/>
+                        Mô tả sản phẩm: <input type="text" name="describe" placeholder=" Mô tả sản phẩm"/><br/>
+                        Nhà sản xuất: <input type="text" name="producer" placeholder=" Nhà sản xuất"/><br/>
+                        Giá: <input type="number" name="prices" placeholder=" Nhà sản xuất"/><br/>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Sửa sản phẩm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabelDelete"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabelDelete">Xóa sản phẩm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/product}" method="post" th:object="${product}">
+                <div class="modal-body">
+                    <input hidden type="text" id="deleteId" name="id">
+                    <span>Bạn có muốnn xóa sản phẩm</span>
+                    <span style="color:red;" id="deleteName"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Xóa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+</html>
