@@ -27,10 +27,9 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public String update(RedirectAttributes redirectAttributes, @RequestParam int updateId, Model model, Product product) {
-product.setId(updateId);
+    public String update(@RequestParam int updateId, Model model, Product product,RedirectAttributes redirectAttributes) {
+        product.setId(updateId);
         productService.update(product);
-
         redirectAttributes.addFlashAttribute("mess", "Sửa sản phẩm thành công");
         return "redirect:/product";
     }
@@ -45,16 +44,23 @@ product.setId(updateId);
     }
 
     @PostMapping("/delete")
-
     public String delete(@RequestParam int id) {
         productService.delete(id);
         return "redirect:/product";
 
     }
+
     @PostMapping("/search")
-    public String search(Model model,@RequestParam String name){
-        List<Product> list=productService.search(name);
-        model.addAttribute("listProduct",list);
+    public String search(Model model, @RequestParam String name) {
+
+        List<Product> listProduct = productService.search(name);
+        if (listProduct.isEmpty()) {
+            model.addAttribute("mess", "Không tìm thấy sản phẩm");
+
+        } else {
+            model.addAttribute("listProduct", listProduct);
+
+        }
         return "list";
     }
 

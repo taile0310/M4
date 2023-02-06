@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-
 public class ProductService implements IProductService {
     @Autowired
     private IProductRepository productRepository;
@@ -23,7 +22,6 @@ public class ProductService implements IProductService {
     @Override
     public void save(Product product) {
         productRepository.save(product);
-
     }
 
     @Override

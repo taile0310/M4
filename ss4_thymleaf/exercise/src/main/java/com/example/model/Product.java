@@ -1,11 +1,17 @@
 package com.example.model;
 
+import javax.persistence.*;
+
+@Entity
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @Column(name = "des")
     private String describe;
     private String producer;
-        private double prices;
+    private double prices;
 
     public Product() {
     }
