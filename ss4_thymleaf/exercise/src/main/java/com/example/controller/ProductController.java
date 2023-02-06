@@ -34,7 +34,6 @@ public class ProductController {
         return "redirect:/product";
     }
 
-
     @PostMapping("/save")
     public String save(Model model, Product product, RedirectAttributes redirectAttributes) {
         productService.save(product);
@@ -47,22 +46,17 @@ public class ProductController {
     public String delete(@RequestParam int id) {
         productService.delete(id);
         return "redirect:/product";
-
     }
 
     @PostMapping("/search")
     public String search(Model model, @RequestParam String name) {
-
         List<Product> listProduct = productService.search(name);
         if (listProduct.isEmpty()) {
             model.addAttribute("mess", "Không tìm thấy sản phẩm");
 
         } else {
             model.addAttribute("listProduct", listProduct);
-
         }
         return "list";
     }
-
-
 }
