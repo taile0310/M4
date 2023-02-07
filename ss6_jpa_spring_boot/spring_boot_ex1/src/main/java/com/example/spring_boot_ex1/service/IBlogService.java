@@ -4,10 +4,10 @@ import com.example.spring_boot_ex1.model.Blog;
 
 import java.util.List;
 
-public interface IBogService {
+public interface IBlogService {
     List<Blog> listBlog();
     void save(Blog blog);
     void update(Blog blog);
     void delete(int id);
-    void view(int id );
+
 }
