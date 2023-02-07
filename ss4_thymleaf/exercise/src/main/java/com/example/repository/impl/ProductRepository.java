@@ -1,4 +1,4 @@
-package com.example.repository.impt;
+package com.example.repository.impl;
 
 import com.example.model.Product;
 import com.example.repository.IProductRepository;
@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductRepository implements IProductRepository {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
 
     @Override
@@ -36,8 +36,8 @@ public class ProductRepository implements IProductRepository {
 
     @Transactional
     @Override
-    public void update(Product product) {
-        Product product1 = findById(product.getId());
+    public void update(int id,Product product) {
+        Product product1 = findById(id);
         product1.setName(product.getName());
         product1.setDescribe(product.getDescribe());
         product1.setProducer(product.getProducer());
@@ -54,7 +54,7 @@ public class ProductRepository implements IProductRepository {
 
     }
 
-    @Transactional
+
     @Override
     public List<Product> search(String name) {
         List<Product> productList = new ArrayList<>();
@@ -62,7 +62,7 @@ public class ProductRepository implements IProductRepository {
         return productList;
     }
 
-    @Transactional
+
     @Override
     public Product findById(int id) {
         return entityManager.find(Product.class, id);

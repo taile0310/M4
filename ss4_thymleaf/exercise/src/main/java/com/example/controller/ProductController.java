@@ -27,9 +27,8 @@ public class ProductController {
     }
 
     @PostMapping("/update")
-    public String update(@RequestParam int updateId, Model model, Product product,RedirectAttributes redirectAttributes) {
-        product.setId(updateId);
-        productService.update(product);
+    public String update(Product product, RedirectAttributes redirectAttributes) {
+        productService.update(product.getId(), product);
         redirectAttributes.addFlashAttribute("mess", "Sửa sản phẩm thành công");
         return "redirect:/product";
     }
@@ -43,9 +42,10 @@ public class ProductController {
     }
 
     @PostMapping("/delete")
-    public String delete(@RequestParam int id) {
+    public String delete(@RequestParam int id, Model model ) {
         productService.delete(id);
-        return "redirect:/product";
+        model.addAttribute("mess", "Xóa thành công");
+        return "list";
     }
 
     @PostMapping("/search")

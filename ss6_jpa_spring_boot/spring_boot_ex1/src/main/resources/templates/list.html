@@ -104,7 +104,7 @@
                 <form th:action="@{/product/update}" method="post" th:object="${product}">
                     <fieldset>
                         <legend>Sửa thông tin sản phẩm</legend>
-                        <input type="number" name="updateId" hidden id="updateId" th:field="*{id}">
+                        <input type="number" name="updateId" hidden id="updateId">
                         <span style="color:red;" id="updateName" hidden>
                         </span> Name: <input type="text" th:field="*{name}"/><br/>
                         Mô tả sản phẩm: <input type="text" th:field="*{describe}" placeholder=" Mô tả sản phẩm"/><br/>
