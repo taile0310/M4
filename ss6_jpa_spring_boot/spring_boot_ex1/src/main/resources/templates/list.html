@@ -17,9 +17,9 @@
                         data-bs-target="#exampleModalAdd"
                         data-bs-whatever="@mdo">Thêm blog
                 </button>
-                <form th:action="@{/blog/search}" method="post" class="d-flex" role="search">
-                    <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search" name="name">
-                    <button class="btn btn-outline-success" type="submit">Tìm kiếm sản phẩm</button>
+                <form th:action="@{/blog}" class="d-flex" role="search" method="get">
+                    <input type="text" name="titleSearch" th:value="${title}">
+                    <button class="btn btn-outline-success">Tìm kiếm Blog</button>
                 </form>
 
             </div>
@@ -27,6 +27,7 @@
     </div>
 </div>
 <marquee th:text="${mess}"></marquee>
+
 <table class="table table-view table-bordered">
     <tr>
         <th>STT</th>
@@ -39,11 +40,11 @@
         <th>Xóa Blog</th>
         <th>Xem Blog</th>
     </tr>
-    <tr th:each="blog : ${listBlog}">
+    <tr th:each="blog : ${blogPage}">
         <td th:text="${blog.id}"></td>
         <td th:text="${blog.title}"></td>
         <td th:text="${blog.content}"></td>
-        <td th:text="${blog.category}"></td>
+        <td th:text="${blog.category.getName()}"></td>
         <td th:text="${blog.author}"></td>
         <td th:text="${blog.startDay}"></td>
         <td>
@@ -65,7 +66,7 @@
         </td>
         <td>
             <button th:attr="onclick=|viewBlog('${blog.id}','${blog.title}',
-            '${blog.content}','${blog.category}','${blog.author}','${blog.startDay}')|"
+            '${blog.content}','${blog.category.getName()}','${blog.author}','${blog.startDay}')|"
                     type="button" class="btn btn-outline-success" data-bs-toggle="modal"
                     data-bs-target="#exampleModalView"
                     data-bs-whatever="@mdo">Xem Blog
@@ -73,6 +74,11 @@
         </td>
     </tr>
 </table>
+<div>
+    <a th:href="@{/blog(page=${blogPage.number - 1}, titleSearch=${title})}" th:if="${blogPage.hasPrevious()}">Trước</a>
+    <span th:text="${blogPage.number + 1}"></span>/<span th:text="${blogPage.totalPages}"></span>
+    <a th:href="@{/blog(page=${blogPage.number + 1}, titleSearch=${title})}" th:if="${blogPage.hasNext()}">Sau</a>
+</div>
 
 
 <div class="modal fade" id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true">
@@ -88,7 +94,11 @@
                         <legend>Thêm sản phẩm</legend>
                         Chủ đề: <input type="text" th:field="*{title}"/><br/>
                         Nội dung: <input type="text" th:field="*{content}"/><br/>
-                        Thể loại: <input type="text" th:field="*{category}"/><br/>
+                        <select th:field="*{category}">
+                            Thể loại:
+                            <option th:each="category : ${listCategory}" th:text="${category.name}" th:value="${category.id}">
+                            </option>
+                        </select>
                         Tác giả: <input type="text" th:field="*{author}"/><br/>
                         Ngày dăng: <input type="date" th:field="*{startDay}"/><br/>
                     </fieldset>
@@ -117,9 +127,9 @@
                         <legend>Sửa thông tin sản phẩm</legend>
                         <input th:field="*{id}" hidden id="updateId" name="updateId">
                         Chủ đề: <input type="text" th:field="*{title}"/><br/>
-                        Nội dung: <input type="text" th:field="*{content}" /><br/>
-                        Thể loại: <input type="text" th:field="*{category}" /><br/>
-                        Tác giả: <input type="text" th:field="*{author}" /><br/>
+                        Nội dung: <input type="text" th:field="*{content}"/><br/>
+                        Thể loại: <input type="text" th:field="*{category}"/><br/>
+                        Tác giả: <input type="text" th:field="*{author}"/><br/>
                         Ngày đăng: <input type="date" th:field="*{startDay}"/><br/>
                     </fieldset>
                     <div class="modal-footer">
@@ -141,17 +151,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                        <legend>View</legend>
-                        <input hidden id="viewId" name="viewId">
-                        Chủ đề: <p id="viewTitle" name="viewTitle"></p><br/>
-                        Nội dung: <p id="viewContent" name="viewContent"></p><br/>
-                        Thể loại: <p id="viewCategory" name="viewCategory"></p><br/>
-                        Tác giả: <p id="viewAuthor" name="viewAuthor"></p><br/>
-                        Ngày đăng: <p id="viewStartDay" name="viewStartDay"></p><br/>
-                    </fieldset>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    </div>
+                <legend>View</legend>
+                <input hidden id="viewId" name="viewId">
+                Chủ đề: <p id="viewTitle" name="viewTitle"></p><br/>
+                Nội dung: <p id="viewContent" name="viewContent"></p><br/>
+                Thể loại: <p id="viewCategory" name="viewCategory"></p><br/>
+                Tác giả: <p id="viewAuthor" name="viewAuthor"></p><br/>
+                Ngày đăng: <p id="viewStartDay" name="viewStartDay"></p><br/>
+                </fieldset>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
             </div>
         </div>
     </div>
@@ -195,7 +205,7 @@
     }
 </script>
 <script>
-    function viewBlog(id, title,content,category,author,startDay){
+    function viewBlog(id, title, content, category, author, startDay) {
         document.getElementById("viewId").value = id;
         document.getElementById("viewTitle").innerText = title;
         document.getElementById("viewContent").innerText = content;

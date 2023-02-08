@@ -1,9 +1,6 @@
 package com.example.spring_boot_ex1.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Blog {
@@ -12,14 +9,16 @@ public class Blog {
     private int id;
     private String title;
     private String content;
-    private String category;
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
     private String author;
     private String startDay;
 
     public Blog() {
     }
 
-    public Blog(int id, String title, String content, String category, String author, String startDay) {
+    public Blog(int id, String title, String content, Category category, String author, String startDay) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -52,11 +51,11 @@ public class Blog {
         this.content = content;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
