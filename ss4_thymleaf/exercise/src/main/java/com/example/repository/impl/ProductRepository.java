@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Component
+
 public class ProductRepository implements IProductRepository {
 
     @PersistenceContext
