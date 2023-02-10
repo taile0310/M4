@@ -20,13 +20,13 @@
     <th>Chỉnh sửa bài hát</th>
 
   </tr>
-  <tr th:each="user : ${listSong}">
-    <td th:text="${user.id}"></td>
-    <td th:text="${user.name}"></td>
-    <td th:text="${user.singer}"></td>
-    <td th:text="${user.category}"></td>
+  <tr th:each="song : ${listSong}">
+    <td th:text="${song.id}"></td>
+    <td th:text="${song.name}"></td>
+    <td th:text="${song.singer}"></td>
+    <td th:text="${song.category}"></td>
     <td>
-      <a class="btn btn-outline-secondary" th:href="@{/edit/__${song.id}__}" >Chỉnh sửa</a>
+      <a class="btn btn-outline-secondary" th:href="@{/update/__${song.id}__}" >Chỉnh sửa</a>
     </td>
   </tr>
 </table>

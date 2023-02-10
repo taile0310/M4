@@ -13,37 +13,37 @@
         <tr>
             <td>
                 First Name:<input type="text" th:field="*{firstName}"/>
-                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+                <span style="color: red" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
             </td>
         </tr>
         <tr>
             <td>
                 Last Name:<input type="text" th:field="*{lastName}"/>
-                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+                <span style="color: red" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
             </td>
         </tr>
         <tr>
             <td>
                 Số điện thoại:<input type="text" th:field="*{phoneNumber}"/>
-                <span th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
+                <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></span>
             </td>
         </tr>
         <tr>
             <td>
                 Tuổi:<input type="text" th:field="*{age}"/>
-                <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+                <span style="color: red" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
             </td>
         </tr>
 
         <tr>
             <td>
                 Email:<input type="text" th:field="*{email}"/>
-                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Không hợp lệ</span>
+                <span style="color: red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Không hợp lệ</span>
             </td>
         </tr>
         <tr>
             <th>
-                <a class="btn btn-outline-secondary" type="submit" >Thêm User</a>
+                <button class="btn btn-outline-secondary" type="submit" >Thêm User</button>
             </th>
             <th>
                 <a class="btn btn-outline-secondary" href="/" type="submit">Quay Lại</a>

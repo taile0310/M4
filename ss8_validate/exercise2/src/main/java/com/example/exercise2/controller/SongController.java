@@ -41,7 +41,7 @@ public class SongController {
         }
         Song song = new Song();
         BeanUtils.copyProperties(songDto, song);
-        this.songService.save(song);
+        songService.save(song);
         redirectAttributes.addFlashAttribute("mess", "Thêm thành công!");
         return "redirect:/";
     }

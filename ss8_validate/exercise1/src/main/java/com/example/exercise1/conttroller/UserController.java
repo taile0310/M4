@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class UserController {
@@ -27,12 +28,11 @@ public class UserController {
     @GetMapping("/form")
     public String showForm(Model model  ){
         model.addAttribute("userDto", new UserDto());
-
         return "create";
     }
 
     @PostMapping("/save")
-    public String saveUser(@Validated @ModelAttribute UserDto userDto, BindingResult bindingResult, Model model) {
+    public String saveUser(@Validated @ModelAttribute UserDto userDto, BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
 
 //        CUSTOMER VALIDATE
         new UserDto().validate(userDto,bindingResult);
@@ -45,7 +45,7 @@ public class UserController {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         userService.save(user);
-        model.addAttribute("mess","Thêm mới thành công");
-        return "list";
+        redirectAttributes.addFlashAttribute("mess","Thêm mới thành công");
+        return "redirect:/";
     }
 }

@@ -17,6 +17,7 @@
     <div>
         <form th:action="@{/add}" method="post" th:object="${songDto}">
             <table class="table table-striped">
+
                 <tr>
                     <td>Tên bài hát: <span th:field="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: red"></span></td>
                     <td><input th:field="*{name}" class="form-control" type="text" placeholder="Song name input" aria-label="default input example"></td>
@@ -34,7 +35,6 @@
                 <tr>
                     <td></td>
                     <td>
-                        <button type="reset" class="btn btn-outline-secondary">Thêm lại</button>
                         <button type="submit" class="btn btn-outline-success">Thêm bài hát</button>
                     </td>
                 </tr>
