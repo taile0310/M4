@@ -45,7 +45,6 @@ public class BlogController {
     @PostMapping("/save")
     public String saveBlog(@ModelAttribute Blog blog, RedirectAttributes redirectAttributes) {
         blogService.save(blog);
-
         redirectAttributes.addFlashAttribute("mess", "Thêm mới thành công");
         return "redirect:/blog";
     }
