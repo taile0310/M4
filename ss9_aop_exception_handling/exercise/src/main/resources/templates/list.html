@@ -8,21 +8,10 @@
 </head>
 <body>
 <h1 style="text-align: center">DANH SÁCH SÁCH</h1>
-
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-   Trả
-</button>
 <div>
-    <div>
-        <nav class="navbar bg-body-tertiary">
-            <div class="container-fluid">
-                <button type="submit" class="btn btn-outline-success" data-bs-toggle="modal"
-                        data-bs-target="#exampleModalAdd"
-                        data-bs-whatever="@mdo">Thêm sách
-                </button>
-            </div>
-        </nav>
-    </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Trả sách
+    </button>
 </div>
 <marquee th:text="${mess}"></marquee>
 <table class="table table-view table-bordered">
@@ -65,6 +54,8 @@
         </div>
     </div>
 </div>
+
+
 </body>
 
 </html>
