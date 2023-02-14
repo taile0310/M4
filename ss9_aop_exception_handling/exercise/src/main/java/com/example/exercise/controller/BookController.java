@@ -28,15 +28,14 @@ public class BookController {
         return "list";
     }
 
-    @GetMapping("rent")
-    public String showRentBook(@RequestParam int id, Model model) {
+    @GetMapping("/rent/{id}")
+    public String showRentBook(@PathVariable("id") int id, Model model) {
         Book book = bookService.findById(id);
         model.addAttribute("book", book);
-
         return "rent";
     }
 
-    @PostMapping("rentBook")
+    @PostMapping("/rentBook")
     public String rentBook(@ModelAttribute Book book, RedirectAttributes redirectAttributes) {
         Random random = new Random();
         String bookCode = String.valueOf(random.nextInt(99999 - 10000 + 1) + 10000);
@@ -50,7 +49,7 @@ public class BookController {
         borrowedBookService.save(borrowedBook);
         redirectAttributes.addFlashAttribute("mess", " Mượn sách thành công");
         redirectAttributes.addFlashAttribute("codeBook", " Mã mượn sách của bạn" + bookCode);
-        return "redirect:/rent";
+        return "redirect:/list";
 
     }
 
