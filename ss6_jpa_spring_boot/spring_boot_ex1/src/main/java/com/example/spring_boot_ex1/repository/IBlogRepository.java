@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface IBlogRepository extends JpaRepository<Blog, Integer> {
 
 //    phân trang list và search
-    Page<Blog> findByTitleContaining(String title,Pageable pageable);
+    Page<Blog> findByTitleContaining(String title, Pageable pageable);
 
 }
 

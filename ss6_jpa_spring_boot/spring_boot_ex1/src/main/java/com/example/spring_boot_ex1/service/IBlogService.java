@@ -13,5 +13,7 @@ public interface IBlogService {
     void delete(int id);
     Page<Blog> findByTitleContaining(String title, Pageable pageable);
 
+    Blog findById(int id);
+
 
 }

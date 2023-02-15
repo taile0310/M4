@@ -59,7 +59,7 @@
         </td>
         <td>
             <button th:attr="onclick=|idDelete('${blog.id}','${blog.title}')|"
-                    type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                     data-bs-target="#exampleModalDelete"
                     data-bs-whatever="@mdo">Xóa
             </button>
@@ -77,11 +77,13 @@
 <div>
     <a th:href="@{/blog(page=${blogPage.number - 1}, titleSearch=${title})}" th:if="${blogPage.hasPrevious()}">Trước</a>
     <span th:text="${blogPage.number + 1}"></span>/<span th:text="${blogPage.totalPages}"></span>
-    <a th:href="@{/blog(page=${blogPage.number + 1}, titleSearch=${title})}" th:if="${blogPage.hasNext()}">Sau</a>
+    <a th:href="@{/blog(page=${blogPage.number + 1}, titleSearch=${title})}" th:if="${blogPage.hasNext()}">sau</a>
 </div>
 
-
-<div class="modal fade" id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true">
+<!--MODAL ADD-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -89,21 +91,36 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/blog/save}" method="post" th:object="${blog}">
+                <form th:action="@{/blog/save}" method="post" th:object="${blogDto}">
                     <fieldset>
                         <legend>Thêm sản phẩm</legend>
-                        Chủ đề: <input type="text" th:field="*{title}"/><br/>
-                        Nội dung: <input type="text" th:field="*{content}"/><br/>
+                        Chủ đề: <input type="text" th:field="*{title}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                        <br/>
+                        Nội dung: <input type="text" th:field="*{content}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+                        <br/>
                         <select th:field="*{category}">
                             Thể loại:
-                            <option th:each="category : ${listCategory}" th:text="${category.name}" th:value="${category.id}">
+                            <option th:each="category : ${listCategory}" th:text="${category.name}"
+                                    th:value="${category.id}">
                             </option>
+                            <span style="color: red" th:if="${#fields.hasErrors('category')}"
+                                  th:errors="*{category}"></span>
                         </select>
-                        Tác giả: <input type="text" th:field="*{author}"/><br/>
-                        Ngày dăng: <input type="date" th:field="*{startDay}"/><br/>
+                        Tác giả: <input type="text" th:field="*{author}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></span>
+                        <br/>
+
+                        Ngày dăng: <input type="date" th:field="*{startDay}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('startDay')}"
+                              th:errors="*{startDay}"></span>
+                        <br/>
                     </fieldset>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Đóng
+                        </button>
                         <button type="submit" class="btn btn-primary">Thêm Blog</button>
                     </div>
                 </form>
@@ -112,8 +129,10 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate"
+<!--MODAL UPDATE-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -122,18 +141,37 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/blog/update}" method="post" th:object="${blog}">
+                <form th:action="@{/blog/update}" method="post" th:object="${blogDto}">
                     <fieldset>
                         <legend>Sửa thông tin sản phẩm</legend>
                         <input th:field="*{id}" hidden id="updateId" name="updateId">
-                        Chủ đề: <input type="text" th:field="*{title}"/><br/>
-                        Nội dung: <input type="text" th:field="*{content}"/><br/>
-                        Thể loại: <input type="text" th:field="*{category}"/><br/>
-                        Tác giả: <input type="text" th:field="*{author}"/><br/>
-                        Ngày đăng: <input type="date" th:field="*{startDay}"/><br/>
+                        Chủ đề: <input type="text" th:field="*{title}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                        <br/>
+                        Nội dung: <input type="text" th:field="*{content}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+                        <br/>
+                        <select th:field="*{category}">
+                            Thể loại:
+                            <option th:each="category : ${listCategory}" th:text="${category.name}"
+                                    th:value="${category.id}">
+                            </option>
+                            <span style="color: red" th:if="${#fields.hasErrors('category')}"
+                                  th:errors="*{category}"></span>
+                        </select>
+                        <br/>
+                        Tác giả: <input type="text" th:field="*{author}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></span>
+                        <br/>
+                        Ngày đăng: <input type="date" th:field="*{startDay}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('startDay')}"
+                              th:errors="*{startDay}"></span>
+                        <br/>
                     </fieldset>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Đóng
+                        </button>
                         <button type="submit" class="btn btn-primary">Sửa Blog</button>
                     </div>
                 </form>
@@ -142,6 +180,7 @@
     </div>
 </div>
 
+<!--MODAL VIEW-->
 <div class="modal fade" id="exampleModalView" tabindex="-1" aria-labelledby="exampleModalLabelView"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -167,7 +206,7 @@
     </div>
 </div>
 
-
+<!--MODAL DELETE-->
 <div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabelDelete"
      aria-hidden="true">
     <div class="modal-dialog">
@@ -193,18 +232,21 @@
 
 </body>
 <script>
+    // DELETE
     function idDelete(id, title) {
         document.getElementById("deleteId").value = id;
         document.getElementById("deleteName").innerText = title;
     }
 </script>
 <script>
+    // UPDATE
     function idUpdate(id, title) {
         document.getElementById("updateId").value = id;
         document.getElementById("updateName").innerText = title;
     }
 </script>
 <script>
+    // VIEW
     function viewBlog(id, title, content, category, author, startDay) {
         document.getElementById("viewId").value = id;
         document.getElementById("viewTitle").innerText = title;
@@ -214,8 +256,17 @@
         document.getElementById("viewStartDay").innerText = startDay;
     }
 </script>
+<script>
+    // ĐÓNG MODAL
+    function onCloseModal() {
+        document.getElementById('exampleModalAdd').style.display = 'none';
+        document.getElementById('exampleModalUpdate').style.display = 'none';
+        window.location.href = "/blog";
+    }
+
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-
 </script>
 </html>
