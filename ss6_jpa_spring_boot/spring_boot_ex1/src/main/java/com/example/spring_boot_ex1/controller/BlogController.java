@@ -29,7 +29,7 @@ public class BlogController {
 
     @GetMapping("")
     public String listBlog(Model model, @RequestParam(required = false, defaultValue = "") String titleSearch,
-                           @PageableDefault(size = 5, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+                           @PageableDefault(size = 2, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Blog> blogPage = blogService.findByTitleContaining(titleSearch, pageable);
         model.addAttribute("blogPage", blogPage);
         model.addAttribute("title", titleSearch);
@@ -76,7 +76,7 @@ public class BlogController {
             return "list";
         }
         BeanUtils.copyProperties(blogDto, blog);
-        blogService.update(blog);
+        blogService.save(blog);
         redirectAttributes.addFlashAttribute("mess", "Sửa blog thành công");
         return "redirect:/blog";
     }

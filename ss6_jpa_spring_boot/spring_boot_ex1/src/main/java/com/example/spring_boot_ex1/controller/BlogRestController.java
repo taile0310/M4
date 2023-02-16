@@ -1,10 +1,14 @@
 package com.example.spring_boot_ex1.controller;
 
+
 import com.example.spring_boot_ex1.dto.BlogDto;
 import com.example.spring_boot_ex1.model.Blog;
 import com.example.spring_boot_ex1.service.IBlogService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +23,14 @@ public class BlogRestController {
     private IBlogService blogService;
 
     @GetMapping("")
-    public ResponseEntity<List<Blog>> getListBlog() {
-        List<Blog> blogList = blogService.listBlog();
-        if (blogList.isEmpty()) {
+    public ResponseEntity<Page<Blog>> getListBlog(@RequestParam(required = false,defaultValue = "") String title,
+                                                  @RequestParam int size,@RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Blog> blogPage = blogService.findByTitleContaining(title, pageable);
+        if (blogPage.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity(blogList, HttpStatus.OK);
+        return new ResponseEntity<>(blogPage, HttpStatus.OK);
     }
 
     @PostMapping("")
@@ -45,14 +51,15 @@ public class BlogRestController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity updateBlog(@PathVariable int id, @RequestBody BlogDto blogDto) {
-        Blog blog = blogService.findById(id);
-        BeanUtils.copyProperties(blogDto, blog);
+    @PatchMapping("/update")
+    public ResponseEntity updateBlog(@RequestBody BlogDto blogDto) {
+        Blog blog = blogService.findById(blogDto.getId());
         if (blog == null) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-        blogService.update(blog);
+        BeanUtils.copyProperties(blogDto, blog);
+        blogService.save(blog);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }
