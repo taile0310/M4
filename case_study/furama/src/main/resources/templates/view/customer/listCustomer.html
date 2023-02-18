@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="d-flex justify-content-center">DANH SÁCH KHÁCH HÀNG</h1>
+<div>
+    <div>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <button type="submit" class="btn btn-outline-success" data-bs-toggle="modal"
+                        data-bs-target="#exampleModalAdd"
+                        data-bs-whatever="@mdo">Thêm khách hàng
+                </button>
+                <form th:action="@{/view/customer/customerList}" class="d-flex" role="search" method="get">
+                    <input type="text" name="nameSearch" th:value="${name}">
+                    <input type="text" name="emailSearch" th:value="${email}">
+                    <button class="btn btn-outline-success">Tìm kiếm</button>
+                </form>
+
+            </div>
+        </nav>
+    </div>
+</div>
+<marquee th:text="${mess}"></marquee>
+<table class="table table-view table-bordered">
+    <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Ngày sinh</th>
+        <th>Giới tính</th>
+        <th>Thẻ căn cước</th>
+        <th>Số điện thoại</th>
+        <th>Email</th>
+        <th>Địa chỉ</th>
+        <th>Loại khách hàng</th>
+        <th>Sửa thông tin</th>
+    </tr>
+    <tr th:each="customer : ${customerPage}">
+        <td th:text="${customer.id}"></td>
+        <td th:text="${customer.name}"></td>
+        <td th:text="${customer.dateOfBirth}"></td>
+        <td>
+            <th:block th:if="${customer.gender == true}">Nam</th:block>
+            <th:block th:if="${customer.gender == false}">Nữ</th:block>
+        </td>
+        <td th:text="${customer.idCard}"></td>
+        <td th:text="${customer.phoneNumber}"></td>
+        <td th:text="${customer.email}"></td>
+        <td th:text="${customer.address}"></td>
+        <td th:text="${customer.customerTypeId.getName()}"></td>
+        <td>
+            <button type="submit" class="btn btn-outline-secondary"
+                    th:attr="onclick=|idUpdate('${customer.id}','${customer.name}','${customer.dateOfBirth}',
+                    '${customer.gender}','${customer.idCard}','${customer.phoneNumber}'
+                    '${customer.email}','${customer.address}','${customer.customerTypeId}')|"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalUpdate"
+                    data-bs-whatever="@mdo">Sửa
+            </button>
+        </td>
+
+    </tr>
+</table>
+<div>
+    <a th:href="@{/customer(page=${customerPage.number - 1}, nameSearch=${name}, emailSearch=${email})}"
+       th:if="${customerPage.hasPrevious()}">Trước</a>
+    <span th:text="${customerPage.number + 1}"></span>/<span th:text="${customerPage.totalPages}"></span>
+    <a th:href="@{/customer(page=${customerPage.number + 1}, nameSearch=${name}, emailSearch=${email})}"
+       th:if="${customerPage.hasNext()}">sau</a>
+</div>
+
+<!--MODAL ADD-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/customer/save}" method="post" th:object="${customerDto}">
+                    <fieldset>
+                        <legend>Thêm Khách Hàng</legend>
+                        Tên Khách Hàng: <input type="text" th:field="*{name}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        <br/>
+                        Ngày sinh: <input type="date" th:field="*{dateOfBirth}"/>
+                        <br/>
+                        Giới tính: <select th:field="*{gender}">
+                        <option value="0">
+                            Nam
+                        </option>
+                        <option value="1">
+                            Nữ
+                        </option>
+                    </select>
+                        <br/>
+                        Thẻ căn cước: <input type="text" th:field="*{idCard}"/>
+                        <br/>
+                        Số điện thoại: <input type="text" th:field="*{phoneNumber}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
+                              th:errors="*{phoneNumber}"></span>
+                        <br/>
+                        Email: <input type="text" th:field="*{email}"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('customerTypeId')}"
+                              th:errors="*{customerTypeId}"></span>
+                        <br/>
+                        Địa chỉ: <input type="text" th:field="*{address}"/>
+                        <br/>
+                        Loại khách hàng: <select th:field="*{customerTypeId}">
+                        <option value="1">
+                            Diamond
+                        </option>
+                        <option value="2">
+                            Gold
+                        </option>
+                    </select>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Đóng
+                        </button>
+                        <button type="submit" class="btn btn-primary">Thêm Khách hàng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL UPDATE-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelUpdate"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/customer/update}" method="post" th:object="${customerDto}">
+                    <fieldset>
+                        <legend>Sửa Thông Tin Khách Hàng</legend>
+                        <input th:field="*{id}" hidden id="updateId" name="id">
+                        Tên Khách Hàng: <input type="text" th:field="*{name}" th:id="updateName"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        <br/>
+                        Ngày sinh: <input type="date" th:field="*{dateOfBirth}" id="updateBirthOfDay"/>
+                        <br/>
+                        Giới tính: <select th:field="*{gender}" id="updateGender">
+                        <option value="0">
+                            Nam
+                        </option>
+                        <option value="1">
+                            Nữ
+                        </option>
+                    </select>
+                        <br/>
+                        Thẻ căn cước: <input type="text" th:field="*{idCard}" id="updateIdCard"/>
+                        <br/>
+                        Số điện thoại: <input type="text" th:field="*{phoneNumber}" id="updatePhoneNumber"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
+                              th:errors="*{phoneNumber}"></span>
+                        <br/>
+                        Email: <input type="text" th:field="*{email}" id="updateEmail"/>
+                        <span style="color: red" th:if="${#fields.hasErrors('email')}"
+                              th:errors="*{email}"></span>
+                        <br/>
+                        <br/>
+                        Địa chỉ: <input type="text" th:field="*{address}" id="updateAddress"/>
+                        <br/>
+                        Loại khách hàng: <select th:field="*{customerTypeId}" id="updateCustomerType">
+                        <option value="1">
+                            Diamond
+                        </option>
+                        <option value="2">
+                            Gold
+                        </option>
+                    </select>
+                    </fieldset>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|exampleModalUpdate()|">Đóng
+                        </button>
+                        <button type="submit" class="btn btn-primary">Sửa thng tin khách hàng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // ĐÓNG MODAL
+    function onCloseModal() {
+        document.getElementById('exampleModalAdd').style.display = 'none';
+        document.getElementById('exampleModalUpdate').style.display = 'none';
+        window.location.href = "/customer";
+    }
+
+    // UPDATE
+    function idUpdate(id, name, birthOfDay, gender, idCard, phoneNumber, email, address, customerTypeId) {
+        document.getElementById("updateId").value = id;
+        document.getElementById("updateName").value = name;
+        document.getElementById("updateBirthOfDay").value = birthOfDay;
+        document.getElementById("updateGender").value = gender;
+        document.getElementById("updateIdCard").value = idCard;
+        document.getElementById("updatePhoneNumber").value = phoneNumber;
+        document.getElementById("updateEmail").value = email;
+        document.getElementById("updateAddress").value = address;
+        document.getElementById("updateCustomerType").value = customerTypeId;
+    }
+</script>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+</script>

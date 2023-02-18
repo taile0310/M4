@@ -1,37 +1,39 @@
-package com.furama.dto;
+package com.furama.model.customer;
 
-import com.furama.model.customer.CustomerType;
+import com.furama.model.contract.Contract;
+import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Validator;
-import javax.validation.constraints.NotEmpty;
+import javax.persistence.*;
+import java.util.Set;
 
-public class CustomerDto {
+@Entity
+public class Customer {
+    @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int id;
-    @NotEmpty(message = "Tên không được để trống")
     private String name;
     private String dateOfBirth;
     private boolean gender;
     private String idCard;
-    @NotEmpty(message = "Số điện thoại không được dể trống")
     private String phoneNumber;
-    @NotEmpty(message = "Email không được để trống")
     private String email;
     private String address;
+    @ManyToOne
+    @JoinColumn(name = "customerTypeId", referencedColumnName = "id")
     private CustomerType customerTypeId;
 
-    public CustomerDto() {
+    @OneToMany(mappedBy = "customerId")
+    private Set<Contract> contractSet;
+
+
+    public Customer() {
+    }
+    public Set<Contract> getContractSet() {
+        return contractSet;
     }
 
-    public CustomerDto(int id, String name, String dateOfBirth, boolean gender, String idCard, String phoneNumber, String email, String address, CustomerType customerTypeId) {
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.idCard = idCard;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.customerTypeId = customerTypeId;
+    public void setContractSet(Set<Contract> contractSet) {
+        this.contractSet = contractSet;
     }
 
     public int getId() {
