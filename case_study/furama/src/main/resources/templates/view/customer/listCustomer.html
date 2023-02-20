@@ -128,10 +128,10 @@
                         Ngày sinh: <input type="date" th:field="*{dateOfBirth}"/>
                         <br/>
                         Giới tính: <select th:field="*{gender}">
-                        <option value="0">
+                        <option th:value="true">
                             Nam
                         </option>
-                        <option value="1">
+                        <option th:value="false">
                             Nữ
                         </option>
                     </select>
@@ -191,10 +191,10 @@
                         Ngày sinh: <input type="date" th:field="*{dateOfBirth}" id="updateBirthOfDay"/>
                         <br/>
                         Giới tính: <select th:field="*{gender}" id="updateGender">
-                        <option value="0">
+                        <option th:value="true">
                             Nam
                         </option>
-                        <option value="1">
+                        <option th:value="false">
                             Nữ
                         </option>
                     </select>
@@ -270,11 +270,7 @@
         document.getElementById("deleteName").innerText = name;
     }
 </script>
-</body>
-</html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-</script>
+
 <script>
     // UPDATE
     function updateCustomer(id, name, birthOfDay, gender, idCard, phoneNumber, email, address, customerType) {
@@ -288,4 +284,10 @@
         document.getElementById("updateAddress").value = address;
         document.getElementById("updateCustomerType").value = customerType;
     }
+</script>
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
 </script>
