@@ -37,8 +37,5 @@ public class CustomerTypeService implements ICustomerTypeService {
 
     }
 
-    @Override
-    public Page<CustomerType> findByNameContaining(String name, Pageable pageable) {
-        return customerTypeRepository.findByNameContaining(name,pageable);
-    }
+
 }

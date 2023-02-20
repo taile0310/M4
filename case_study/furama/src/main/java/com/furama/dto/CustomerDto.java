@@ -1,8 +1,9 @@
 package com.furama.dto;
 
 import com.furama.model.customer.CustomerType;
+import org.hibernate.validator.constraints.UniqueElements;
 
-import javax.validation.Validator;
+
 import javax.validation.constraints.NotEmpty;
 
 public class CustomerDto {
@@ -12,26 +13,15 @@ public class CustomerDto {
     private String dateOfBirth;
     private boolean gender;
     private String idCard;
+
     @NotEmpty(message = "Số điện thoại không được dể trống")
     private String phoneNumber;
     @NotEmpty(message = "Email không được để trống")
     private String email;
     private String address;
-    private CustomerType customerTypeId;
+    private CustomerType customerType;
 
     public CustomerDto() {
-    }
-
-    public CustomerDto(int id, String name, String dateOfBirth, boolean gender, String idCard, String phoneNumber, String email, String address, CustomerType customerTypeId) {
-        this.id = id;
-        this.name = name;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-        this.idCard = idCard;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.address = address;
-        this.customerTypeId = customerTypeId;
     }
 
     public int getId() {
@@ -98,11 +88,11 @@ public class CustomerDto {
         this.address = address;
     }
 
-    public CustomerType getCustomerTypeId() {
-        return customerTypeId;
+    public CustomerType getCustomerType() {
+        return customerType;
     }
 
-    public void setCustomerTypeId(CustomerType customerTypeId) {
-        this.customerTypeId = customerTypeId;
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
     }
 }

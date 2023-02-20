@@ -1,9 +1,10 @@
 package com.furama.model.customer;
 
 import com.furama.model.contract.Contract;
-import org.springframework.validation.annotation.Validated;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -11,29 +12,31 @@ public class Customer {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @Column(length = 45)
     private String name;
     private String dateOfBirth;
     private boolean gender;
+
+    @Column(length = 45, unique = true)
     private String idCard;
+
     private String phoneNumber;
+
+    @Column(length = 45, unique = true)
     private String email;
+
+    @Column(length = 45)
     private String address;
     @ManyToOne
-    @JoinColumn(name = "customerTypeId", referencedColumnName = "id")
-    private CustomerType customerTypeId;
+    @JoinColumn(name = "customerType", referencedColumnName = "id")
+    private CustomerType customerType;
 
-    @OneToMany(mappedBy = "customerId")
+    @OneToMany(mappedBy = "customer")
     private Set<Contract> contractSet;
 
 
     public Customer() {
-    }
-    public Set<Contract> getContractSet() {
-        return contractSet;
-    }
-
-    public void setContractSet(Set<Contract> contractSet) {
-        this.contractSet = contractSet;
     }
 
     public int getId() {
@@ -100,11 +103,19 @@ public class Customer {
         this.address = address;
     }
 
-    public CustomerType getCustomerTypeId() {
-        return customerTypeId;
+    public CustomerType getCustomerType() {
+        return customerType;
     }
 
-    public void setCustomerTypeId(CustomerType customerTypeId) {
-        this.customerTypeId = customerTypeId;
+    public void setCustomerType(CustomerType customerType) {
+        this.customerType = customerType;
+    }
+
+    public Set<Contract> getContractSet() {
+        return contractSet;
+    }
+
+    public void setContractSet(Set<Contract> contractSet) {
+        this.contractSet = contractSet;
     }
 }

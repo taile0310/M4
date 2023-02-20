@@ -1,7 +1,10 @@
 package com.furama.model.employee;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -9,8 +12,10 @@ public class EducationDegree {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @Column(length = 45, unique = true)
     private String name;
-    @OneToMany(mappedBy = "educationDegreeId")
+    @OneToMany(mappedBy = "educationDegree")
     private Set<Employee> employeeSet;
 
     public EducationDegree() {

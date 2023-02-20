@@ -10,13 +10,21 @@ public class ContractDetail {
     private int id;
     private int quantity;
     @ManyToOne
-    @JoinColumn(name = "contractId", referencedColumnName = "id")
-    private Contract contractId;
+    @JoinColumn(name = "contract", referencedColumnName = "id")
+    private Contract contract;
     @ManyToOne
-    @JoinColumn(name = "attachFacilityId",referencedColumnName = "id")
-    private AttachFacility attachFacilityId;
+    @JoinColumn(name = "attachFacility",referencedColumnName = "id")
+    private AttachFacility attachFacility;
 
     public ContractDetail() {
+    }
+
+    public AttachFacility getAttachFacility() {
+        return attachFacility;
+    }
+
+    public void setAttachFacility(AttachFacility attachFacility) {
+        this.attachFacility = attachFacility;
     }
 
     public int getId() {
@@ -36,15 +44,15 @@ public class ContractDetail {
     }
 
     public Contract getContractId() {
-        return contractId;
+        return contract;
     }
 
     public void setContractId(Contract contractId) {
-        this.contractId = contractId;
+        this.contract = contract;
     }
 
-    public void setAttachFacilityId(AttachFacility attachFacilityId) {
-        this.attachFacilityId = attachFacilityId;
+    public void setAttachFacilityId(AttachFacility attachFacility) {
+        this.attachFacility = attachFacility;
     }
 
 }

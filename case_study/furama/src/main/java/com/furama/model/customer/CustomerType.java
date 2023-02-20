@@ -4,15 +4,19 @@ import com.furama.model.customer.Customer;
 import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
+
 @Entity
 public class CustomerType {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(length = 45)
+    @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "customerTypeId")
+    @OneToMany(mappedBy = "customerType")
     private Set<Customer> customerSet;
 
     public CustomerType() {

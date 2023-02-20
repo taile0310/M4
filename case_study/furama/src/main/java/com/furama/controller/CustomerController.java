@@ -2,6 +2,7 @@ package com.furama.controller;
 
 import com.furama.dto.CustomerDto;
 import com.furama.model.customer.Customer;
+import com.furama.model.customer.CustomerType;
 import com.furama.service.ICustomerService;
 import com.furama.service.ICustomerTypeService;
 import org.springframework.beans.BeanUtils;
@@ -25,14 +26,18 @@ public class CustomerController {
     @Autowired
     private ICustomerTypeService customerTypeService;
 
+
     @GetMapping("")
-    public String getShowListCustomer(@RequestParam(required = false, defaultValue = "") String nameSearch,
-                                      @RequestParam(required = false, defaultValue = "") String emailSearch,
-                                      @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Model model) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, pageable);
+    public String getShowListCustomer(
+            @RequestParam(required = false, defaultValue = "") String nameSearch,
+            @RequestParam(required = false, defaultValue = "") String emailSearch,
+            @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
+            @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Model model) {
+        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
         model.addAttribute("customerPage", customerPage);
         model.addAttribute("name", nameSearch);
         model.addAttribute("email", emailSearch);
+        model.addAttribute("customerTypeSearch", customerTypeSearch);
         model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
         model.addAttribute("customerDto", new CustomerDto());
         return "view/customer/listCustomer";
@@ -43,13 +48,15 @@ public class CustomerController {
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
+                                 @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, pageable);
+        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerPage);
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
+            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("customerDto", customerDto);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
             model.addAttribute("hasErr", "true");
@@ -63,20 +70,22 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    public String updateBlog(@Validated @ModelAttribute CustomerDto customerDto, BindingResult bindingResult, Customer customer,
+    public String updateCustomer(@Validated @ModelAttribute CustomerDto customerDto, BindingResult bindingResult, Customer customer,
                              @RequestParam(required = false, defaultValue = "") String nameSearch,
                              @RequestParam(required = false, defaultValue = "") String emailSearch,
+                             @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
                              @PageableDefault(size = 3, page = 0, sort = "id",
                                      direction = Sort.Direction.ASC) Pageable pageable,
                              RedirectAttributes redirectAttributes, Model model) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, pageable);
+        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerPage);
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
+            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("customerDto", customerDto);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
-            model.addAttribute("hasErr", "true");
+            model.addAttribute("hasError", "true");
             return "view/customer/listCustomer";
         }
         BeanUtils.copyProperties(customerDto, customer);
@@ -85,4 +94,10 @@ public class CustomerController {
         return "redirect:/customer";
     }
 
+    @PostMapping("/delete")
+    public String deleteCustomer(@RequestParam int id, RedirectAttributes redirectAttributes) {
+        customerService.deleteCustomer(id);
+        redirectAttributes.addFlashAttribute("mess", "Xóa thành công khách hàng");
+        return "redirect:/customer";
+    }
 }

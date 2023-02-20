@@ -1,3 +1,10 @@
+/* NAVBAR*/
+#bgnavbar {
+    background-color: #046056;
+    color: white;
+}
+/*FOOTER*/
+
 footer {
     background: #16222A;
     background: -webkit-linear-gradient(59deg, #3A6073, #16222A);
@@ -43,6 +50,22 @@ ul.social-network {
 ul.social-network li {
     display: inline;
     margin: 0 5px;
+}
+
+
+/* footer social icons */
+
+.social-network a.icoFacebook:hover {
+    background-color: #3B5998;
+}
+
+.social-network a.icoLinkedin:hover {
+    background-color: #007bb7;
+}
+
+.social-network a.icoFacebook:hover i,
+.social-network a.icoLinkedin:hover i {
+    color: #fff;
 }
 
 .social-network a.socialIcon:hover,
@@ -93,19 +116,4 @@ ul.social-network li {
 
 .social-network a {
     background-color: #F9F9F9;
-}
-
-.rows{
-    width: 100%;
-    height: 70%;
-}
-
-.slide-content{
-    width: 100%;
-    height: 100%;
-    padding: 0;
-}
-.slide-content img{
-    width: 100%;
-    height: 680px;
 }

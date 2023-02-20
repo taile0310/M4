@@ -1,6 +1,7 @@
 package com.furama.model.facility;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -9,10 +10,12 @@ public class FacilityType {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
 
     private int id;
+    @NotNull
+
     private String name;
 
-    @OneToMany(mappedBy = "facilityTypeId")
-    private Set<Facility> facilitySet;
+    @OneToMany(mappedBy = "facilityType")
+        private Set<Facility> facilitySet;
 
     public FacilityType() {
     }

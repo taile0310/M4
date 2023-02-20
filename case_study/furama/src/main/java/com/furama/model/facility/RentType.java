@@ -1,6 +1,7 @@
 package com.furama.model.facility;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
@@ -8,8 +9,10 @@ public class RentType {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @Column(length = 45)
     private String name;
-    @OneToMany(mappedBy = "rentTypeId")
+    @OneToMany(mappedBy = "rentType")
     private Set<Facility> facilitySet;
 
     public RentType() {

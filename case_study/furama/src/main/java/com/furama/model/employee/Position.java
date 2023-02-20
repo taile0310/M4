@@ -1,17 +1,21 @@
 package com.furama.model.employee;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
 public class Position {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-
     private int id;
+    @NotNull
+    @Column(length = 45, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "positionId")
+    @OneToMany(mappedBy = "position")
     private Set<Employee> employeeSet;
 
     public Position() {

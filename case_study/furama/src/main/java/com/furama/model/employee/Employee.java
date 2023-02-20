@@ -1,49 +1,62 @@
 package com.furama.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.furama.model.contract.Contract;
 import com.furama.model.login.User;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @Column(length = 45)
     private String name;
     private String dateOfBirth;
+
+    @Column(length = 45, unique = true)
     private String idCard;
     private double salary;
+    @Column(length = 10, unique = true)
     private String phoneNumber;
+
+    @Column(length = 45, unique = true)
     private String email;
+    @Column(length = 45)
     private String address;
     @ManyToOne
-    @JoinColumn(name = "userName",referencedColumnName = "userName")
+    @JoinColumn(name = "userName", referencedColumnName = "userName")
     private User userName;
     @ManyToOne
-    @JoinColumn(name = "positionId", referencedColumnName = "id")
-    private Position positionId;
+    @JoinColumn(name = "position", referencedColumnName = "id")
+
+    private Position position;
 
     @ManyToOne
-    @JoinColumn(name = "educationDegreeId",referencedColumnName = "id")
-    private EducationDegree educationDegreeId;
+    @JoinColumn(name = "educationDegree", referencedColumnName = "id")
+    private EducationDegree educationDegree;
     @ManyToOne
-    @JoinColumn(name = "divisionId",referencedColumnName = "id")
-    private Division divisionId;
+    @JoinColumn(name = "division", referencedColumnName = "id")
+    private Division division;
 
-    @OneToMany(mappedBy = "employeeId")
+    @OneToMany(mappedBy = "employee")
     private Set<Contract> contractSet;
 
+
+
+    public Employee() {
+    }
     public Set<Contract> getContractSet() {
         return contractSet;
     }
 
     public void setContractSet(Set<Contract> contractSet) {
         this.contractSet = contractSet;
-    }
-
-    public Employee() {
     }
 
     public int getId() {
@@ -118,27 +131,27 @@ public class Employee {
         this.userName = userName;
     }
 
-    public Position getPositionId() {
-        return positionId;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setPositionId(Position positionId) {
-        this.positionId = positionId;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public EducationDegree getEducationDegreeId() {
-        return educationDegreeId;
+    public EducationDegree getEducationDegree() {
+        return educationDegree;
     }
 
-    public void setEducationDegreeId(EducationDegree educationDegreeId) {
-        this.educationDegreeId = educationDegreeId;
+    public void setEducationDegree(EducationDegree educationDegree) {
+        this.educationDegree = educationDegree;
     }
 
-    public Division getDivisionId() {
-        return divisionId;
+    public Division getDivision() {
+        return division;
     }
 
-    public void setDivisionId(Division divisionId) {
-        this.divisionId = divisionId;
+    public void setDivision(Division division) {
+        this.division = division;
     }
 }

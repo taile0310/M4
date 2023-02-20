@@ -1,20 +1,26 @@
 package com.furama.model.contract;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
 public class AttachFacility {
     @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY)
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(length = 45)
+    @NotNull
     private String name;
     private double cost;
+    @Column(length = 10)
     private String unit;
+    @NotNull
+    @Column(length = 45)
     private String status;
 
-    @OneToMany(mappedBy = "attachFacilityId")
+    @OneToMany(mappedBy = "attachFacility")
     private Set<ContractDetail> contractDetailSet;
 
     public AttachFacility() {

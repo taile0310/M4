@@ -16,17 +16,17 @@ public class Contract {
     private String endDay;
     private double deposit;
     @ManyToOne
-    @JoinColumn(name = "employeeId", referencedColumnName = "id")
-    private Employee employeeId;
+    @JoinColumn(name = "employee", referencedColumnName = "id")
+    private Employee employee;
     @ManyToOne
-    @JoinColumn(name = "customerId", referencedColumnName = "id")
-    private Customer customerId;
+    @JoinColumn(name = "customer", referencedColumnName = "id")
+    private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "facilityId",referencedColumnName = "id")
-    private Facility facilityId;
+    @JoinColumn(name = "facility",referencedColumnName = "id")
+    private Facility facility;
 
-    @OneToMany(mappedBy = "contractId")
+    @OneToMany(mappedBy = "contract")
     private Set<ContractDetail> contractDetailSet;
 
 
@@ -65,28 +65,28 @@ public class Contract {
         this.deposit = deposit;
     }
 
-    public Employee getEmployeeId() {
-        return employeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeId(Employee employeeId) {
-        this.employeeId = employeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
-    public Customer getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCustomerId(Customer customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public Facility getFacilityId() {
-        return facilityId;
+    public Facility getFacility() {
+        return facility;
     }
 
-    public void setFacilityId(Facility facilityId) {
-        this.facilityId = facilityId;
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
 
     public Set<ContractDetail> getContractDetailSet() {

@@ -11,6 +11,6 @@ public interface ICustomerTypeService {
     void saveCustomerType(CustomerType customerType);
     void updateCustomerType(CustomerType customerType);
     void deleteCustomerType(int id);
-    Page<CustomerType> findByNameContaining(String name, Pageable pageable);
+
 
 }

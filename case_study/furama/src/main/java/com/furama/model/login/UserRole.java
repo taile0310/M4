@@ -1,9 +1,6 @@
 package com.furama.model.login;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class UserRole {
@@ -11,8 +8,8 @@ public class UserRole {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "roleId", referencedColumnName = "id")
-    private Role roleId;
+    @JoinColumn(name = "role", referencedColumnName = "id")
+    private Role role;
 
     @ManyToOne
     @JoinColumn(name = "userName", referencedColumnName = "userName")
@@ -30,11 +27,11 @@ public class UserRole {
     }
 
     public Role getRoleId() {
-        return roleId;
+        return role;
     }
 
     public void setRoleId(Role roleId) {
-        this.roleId = roleId;
+        this.role = roleId;
     }
 
     public User getUserName() {

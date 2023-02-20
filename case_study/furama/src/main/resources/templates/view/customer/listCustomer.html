@@ -7,21 +7,48 @@
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
+<!--<div th:replace="~{furama :: navbar}"></div>-->
+<!--    navbar-->
+<div class="row">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/home">Home</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/customer-type">Customer Type</a>
+                    </li>
+                </ul>
+                <form th:action="@{/customer}" class="d-flex" role="search" method="get">
+                    <input type="text" name="nameSearch" th:value="${name}">
+                    <input type="text" name="emailSearch" th:value="${email}">
+                    <select name="customerTypeSearch">
+                        <option th:each="customerType: ${getShowListCustomerType}"
+                                     th:text="${customerType.getName()}"
+                                     th:value="${customerType.getId()}">
+                        </option>
+                    </select>
+                    <button class="btn btn-outline-success">Tìm kiếm</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</div>
 <h1 class="d-flex justify-content-center">DANH SÁCH KHÁCH HÀNG</h1>
 <div>
     <div>
         <nav class="navbar bg-body-tertiary">
             <div class="container-fluid">
-                <button type="submit" class="btn btn-outline-success" data-bs-toggle="modal"
+                <button type="submit" class="btn btn-outline-success"
+                        data-bs-toggle="modal"
                         data-bs-target="#exampleModalAdd"
                         data-bs-whatever="@mdo">Thêm khách hàng
                 </button>
-                <form th:action="@{/view/customer/customerList}" class="d-flex" role="search" method="get">
-                    <input type="text" name="nameSearch" th:value="${name}">
-                    <input type="text" name="emailSearch" th:value="${email}">
-                    <button class="btn btn-outline-success">Tìm kiếm</button>
-                </form>
-
             </div>
         </nav>
     </div>
@@ -39,6 +66,7 @@
         <th>Địa chỉ</th>
         <th>Loại khách hàng</th>
         <th>Sửa thông tin</th>
+        <th>Xóa khách hàng</th>
     </tr>
     <tr th:each="customer : ${customerPage}">
         <td th:text="${customer.id}"></td>
@@ -52,18 +80,24 @@
         <td th:text="${customer.phoneNumber}"></td>
         <td th:text="${customer.email}"></td>
         <td th:text="${customer.address}"></td>
-        <td th:text="${customer.customerTypeId.getName()}"></td>
+        <td th:text="${customer.customerType.getName()}"></td>
         <td>
-            <button type="submit" class="btn btn-outline-secondary"
-                    th:attr="onclick=|idUpdate('${customer.id}','${customer.name}','${customer.dateOfBirth}',
-                    '${customer.gender}','${customer.idCard}','${customer.phoneNumber}'
-                    '${customer.email}','${customer.address}','${customer.customerTypeId}')|"
+            <button type="button" class="btn btn-outline-secondary"
+                    th:attr="onclick=|updateCustomer('${customer.id}','${customer.name}','${customer.dateOfBirth}',
+                    '${customer.gender}','${customer.idCard}','${customer.phoneNumber}',
+                    '${customer.email}','${customer.address}','${customer.customerType}')|"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModalUpdate"
                     data-bs-whatever="@mdo">Sửa
             </button>
         </td>
-
+        <td>
+            <button th:attr="onclick=|idDelete('${customer.id}','${customer.name}')|"
+                    type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalDelete"
+                    data-bs-whatever="@mdo">Xóa
+            </button>
+        </td>
     </tr>
 </table>
 <div>
@@ -109,18 +143,15 @@
                               th:errors="*{phoneNumber}"></span>
                         <br/>
                         Email: <input type="text" th:field="*{email}"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('customerTypeId')}"
-                              th:errors="*{customerTypeId}"></span>
+                        <span style="color: red" th:if="${#fields.hasErrors('email')}"
+                              th:errors="*{email}"></span>
                         <br/>
                         Địa chỉ: <input type="text" th:field="*{address}"/>
                         <br/>
-                        Loại khách hàng: <select th:field="*{customerTypeId}">
-                        <option value="1">
-                            Diamond
-                        </option>
-                        <option value="2">
-                            Gold
-                        </option>
+                        Loại khách hàng: <select th:field="*{customerType}">
+                        <option th:each="listCustomerType: ${getShowListCustomerType}"
+                                th:text="${listCustomerType.getName()}"
+                                th:value="${listCustomerType.getId()}"></option>
                     </select>
                     </fieldset>
                     <div class="modal-footer">
@@ -136,9 +167,9 @@
 </div>
 
 <!--MODAL UPDATE-->
-<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
      id="exampleModalUpdate" tabindex="-1" aria-labelledby="exampleModalLabelUpdate"
-     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}"
+     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}"
      aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -147,11 +178,14 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+
                 <form th:action="@{/customer/update}" method="post" th:object="${customerDto}">
+
                     <fieldset>
                         <legend>Sửa Thông Tin Khách Hàng</legend>
-                        <input th:field="*{id}" hidden id="updateId" name="id">
-                        Tên Khách Hàng: <input type="text" th:field="*{name}" th:id="updateName"/>
+                        <input th:field="*{id}" hidden id="updateId" >
+                        Tên Khách Hàng: <input type="text" th:field="*{name}"  id="updateName" />
+
                         <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
                         <br/>
                         Ngày sinh: <input type="date" th:field="*{dateOfBirth}" id="updateBirthOfDay"/>
@@ -175,29 +209,51 @@
                         <span style="color: red" th:if="${#fields.hasErrors('email')}"
                               th:errors="*{email}"></span>
                         <br/>
-                        <br/>
                         Địa chỉ: <input type="text" th:field="*{address}" id="updateAddress"/>
                         <br/>
-                        Loại khách hàng: <select th:field="*{customerTypeId}" id="updateCustomerType">
-                        <option value="1">
-                            Diamond
-                        </option>
-                        <option value="2">
-                            Gold
-                        </option>
+                        Loại khách hàng: <select th:field="*{customerType}" id="updateCustomerType">
+                        <option th:each="listCustomerType: ${getShowListCustomerType}"
+                                th:text="${listCustomerType.getName()}"
+                                th:value="${listCustomerType.getId()}"></option>>
                     </select>
                     </fieldset>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                th:attr="onclick=|exampleModalUpdate()|">Đóng
+                                th:attr="onclick=|onCloseModal()|">Đóng
                         </button>
-                        <button type="submit" class="btn btn-primary">Sửa thng tin khách hàng</button>
+                        <button type="submit" class="btn btn-primary">Sửa thông tin khách hàng</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+<!--MODAL DELETE-->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabelDelete"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabelDelete">Xóa sản phẩm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/customer/delete}" method="post">
+                <div class="modal-body">
+                    <input hidden type="text" id="deleteId" name="id">
+                    <span>Bạn có muốn xóa khách hàng</span>
+                    <span style="color:red;" id="deleteName"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Xóa khách hàng</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
     // ĐÓNG MODAL
     function onCloseModal() {
@@ -205,9 +261,23 @@
         document.getElementById('exampleModalUpdate').style.display = 'none';
         window.location.href = "/customer";
     }
+</script>
 
+<script>
+    // DELETE
+    function idDelete(id, name) {
+        document.getElementById("deleteId").value = id;
+        document.getElementById("deleteName").innerText = name;
+    }
+</script>
+</body>
+</html>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
+</script>
+<script>
     // UPDATE
-    function idUpdate(id, name, birthOfDay, gender, idCard, phoneNumber, email, address, customerTypeId) {
+    function updateCustomer(id, name, birthOfDay, gender, idCard, phoneNumber, email, address, customerType) {
         document.getElementById("updateId").value = id;
         document.getElementById("updateName").value = name;
         document.getElementById("updateBirthOfDay").value = birthOfDay;
@@ -216,11 +286,6 @@
         document.getElementById("updatePhoneNumber").value = phoneNumber;
         document.getElementById("updateEmail").value = email;
         document.getElementById("updateAddress").value = address;
-        document.getElementById("updateCustomerType").value = customerTypeId;
+        document.getElementById("updateCustomerType").value = customerType;
     }
-</script>
-</body>
-</html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
 </script>

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("customer-type")
+@RequestMapping("/customer-type")
 public class CustomerTypeController {
     @Autowired
     private ICustomerTypeService customerTypeService;
@@ -21,7 +21,6 @@ public class CustomerTypeController {
     @GetMapping("")
     public String getListCustomerType(Model model){
         model.addAttribute("customerService", customerTypeService.getListCustomerType());
-//        model.addAttribute("customerType", new CustomerType());
         return "view/customer/listCustomerType";
     }
 

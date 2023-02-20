@@ -1,42 +1,24 @@
-package com.furama.model.facility;
+package com.furama.dto;
 
-import com.furama.model.contract.Contract;
+import com.furama.model.facility.FacilityType;
+import com.furama.model.facility.RentType;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
+import javax.validation.constraints.NotEmpty;
 
-@Entity
-public class Facility {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FacilityDto {
     private int id;
-    @NotNull
-    @Column(length = 45)
+    @NotEmpty(message = "Tên không được để trống")
     private String name;
     private int area;
+    @NotEmpty(message = "Giá thuê phòng không được để trống")
     private double cost;
     private int maxPeople;
-    @NotNull
-    @Column(length = 45)
+    @NotEmpty(message = "Tiêu chuẩn phòng không đuợc để trống")
     private String standardRoom;
-
-    @Column(length = 45)
     private String descriptionOtherConvenience;
     private double poolArea;
-    private int numberOfFloor;
-    private String facilityFree;
-    @ManyToOne
-    @JoinColumn(name = "rentType", referencedColumnName = "id")
-    private RentType rentType;
-    @ManyToOne
-    @JoinColumn(name = "facilityType", referencedColumnName = "id")
-    private FacilityType facilityType;
-    @OneToMany(mappedBy = "facility")
-    private Set<Contract> contractSet;
 
-
-    public Facility() {
+    public FacilityDto() {
     }
 
     public int getId() {
@@ -119,14 +101,6 @@ public class Facility {
         this.facilityFree = facilityFree;
     }
 
-    public Set<Contract> getContractSet() {
-        return contractSet;
-    }
-
-    public void setContractSet(Set<Contract> contractSet) {
-        this.contractSet = contractSet;
-    }
-
     public RentType getRentType() {
         return rentType;
     }
@@ -142,4 +116,9 @@ public class Facility {
     public void setFacilityType(FacilityType facilityType) {
         this.facilityType = facilityType;
     }
+
+    private int numberOfFloor;
+    private String facilityFree;
+    private RentType rentType;
+    private FacilityType facilityType;
 }
