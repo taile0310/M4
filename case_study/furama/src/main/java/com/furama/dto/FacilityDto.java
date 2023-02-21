@@ -7,16 +7,20 @@ import javax.validation.constraints.NotEmpty;
 
 public class FacilityDto {
     private int id;
-    @NotEmpty(message = "Tên không được để trống")
+    @NotEmpty(message = "Tên không đuợc để trống")
     private String name;
     private int area;
-    @NotEmpty(message = "Giá thuê phòng không được để trống")
     private double cost;
     private int maxPeople;
-    @NotEmpty(message = "Tiêu chuẩn phòng không đuợc để trống")
     private String standardRoom;
     private String descriptionOtherConvenience;
     private double poolArea;
+
+    private int numberOfFloor;
+    private String facilityFree;
+
+    private RentType rentType;
+    private FacilityType facilityType;
 
     public FacilityDto() {
     }
@@ -117,8 +121,5 @@ public class FacilityDto {
         this.facilityType = facilityType;
     }
 
-    private int numberOfFloor;
-    private String facilityFree;
-    private RentType rentType;
-    private FacilityType facilityType;
+
 }

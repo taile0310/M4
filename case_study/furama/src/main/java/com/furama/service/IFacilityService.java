@@ -11,6 +11,6 @@ public interface IFacilityService {
     List<Facility> getListFacility();
     void saveFacility(Facility facility);
     void deleteFacility(int id);
-    Page<Facility> searchForTwoField(String name,Pageable pageable);
+    Page<Facility> searchForTwoField(String name,String facilityType,Pageable pageable);
 
 }

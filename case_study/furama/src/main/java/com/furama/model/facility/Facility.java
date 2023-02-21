@@ -11,13 +11,13 @@ public class Facility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotNull
     @Column(length = 45)
     private String name;
     private int area;
+
     private double cost;
     private int maxPeople;
-    @NotNull
+
     @Column(length = 45)
     private String standardRoom;
 

@@ -31,10 +31,14 @@ public class CustomerController {
     public String getShowListCustomer(
             @RequestParam(required = false, defaultValue = "") String nameSearch,
             @RequestParam(required = false, defaultValue = "") String emailSearch,
-            @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
+            @RequestParam(required = false, defaultValue = "0") int customerTypeSearch,
             @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Model model) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
-        model.addAttribute("customerPage", customerPage);
+        Page<Customer> customerPage = customerService.customerPage(nameSearch,emailSearch,pageable);
+        if (customerTypeSearch == 0) {
+            model.addAttribute("customerPage",customerPage);
+        } else {
+            model.addAttribute("customerPage", customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable));
+        }
         model.addAttribute("name", nameSearch);
         model.addAttribute("email", emailSearch);
         model.addAttribute("customerTypeSearch", customerTypeSearch);
@@ -48,7 +52,7 @@ public class CustomerController {
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
-                                 @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
+                                 @RequestParam(required = false, defaultValue = "") int customerTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
@@ -71,12 +75,12 @@ public class CustomerController {
 
     @PostMapping("/update")
     public String updateCustomer(@Validated @ModelAttribute CustomerDto customerDto, BindingResult bindingResult, Customer customer,
-                             @RequestParam(required = false, defaultValue = "") String nameSearch,
-                             @RequestParam(required = false, defaultValue = "") String emailSearch,
-                             @RequestParam(required = false, defaultValue = "") String customerTypeSearch,
-                             @PageableDefault(size = 3, page = 0, sort = "id",
-                                     direction = Sort.Direction.ASC) Pageable pageable,
-                             RedirectAttributes redirectAttributes, Model model) {
+                                 @RequestParam(required = false, defaultValue = "") String nameSearch,
+                                 @RequestParam(required = false, defaultValue = "") String emailSearch,
+                                 @RequestParam(required = false, defaultValue = "") int customerTypeSearch,
+                                 @PageableDefault(size = 3, page = 0, sort = "id",
+                                         direction = Sort.Direction.ASC) Pageable pageable,
+                                 RedirectAttributes redirectAttributes, Model model) {
         Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerPage);
@@ -100,4 +104,5 @@ public class CustomerController {
         redirectAttributes.addFlashAttribute("mess", "Xóa thành công khách hàng");
         return "redirect:/customer";
     }
+
 }

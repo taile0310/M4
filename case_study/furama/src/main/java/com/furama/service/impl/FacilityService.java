@@ -31,7 +31,9 @@ public class FacilityService implements IFacilityService {
     }
 
     @Override
-    public Page<Facility> searchForTwoField(String name, Pageable pageable) {
-        return facilityRepository.findByNameContaining(name, pageable);
+    public Page<Facility> searchForTwoField(String name, String facilityType, Pageable pageable) {
+        return facilityRepository.findByNameContainingAndFacilityType(name, facilityType , pageable );
     }
+
+
 }

@@ -13,14 +13,12 @@ public class CustomerDto {
     private String dateOfBirth;
     private boolean gender;
     private String idCard;
-
     @NotEmpty(message = "Số điện thoại không được dể trống")
     private String phoneNumber;
     @NotEmpty(message = "Email không được để trống")
     private String email;
     private String address;
     private CustomerType customerType;
-
     public CustomerDto() {
     }
 

@@ -5,6 +5,7 @@ import com.furama.dto.FacilityDto;
 import com.furama.model.facility.Facility;
 import com.furama.service.IFacilityService;
 import com.furama.service.IFacilityTypeService;
+import com.furama.service.IRentTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,14 +27,20 @@ public class FacilityController {
     @Autowired
     private IFacilityTypeService facilityTypeService;
 
+    @Autowired
+    private IRentTypeService rentTypeService;
+
     @GetMapping("")
     public String getListFacility(@RequestParam(required = false, defaultValue = "") String nameSearch,
+                                  @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
                                   @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                                   Model model){
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch, pageable);
+        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
         model.addAttribute("facilityPage", facilityPage);
         model.addAttribute("name", nameSearch);
+        model.addAttribute("facilityType", facilityTypeSearch);
         model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
+        model.addAttribute("rentTypeService", rentTypeService.getListRentType());
         model.addAttribute("facilityDto", new FacilityDto());
         return "view/facility/listFacility";
     }
@@ -42,14 +49,18 @@ public class FacilityController {
     public String addNewFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
+                                 @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch, pageable);
+        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
+            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
+
+            model.addAttribute("rentTypeService", rentTypeService.getListRentType());
             model.addAttribute("hasErr", "true");
             return "view/facility/listFacility";
         }
@@ -64,15 +75,18 @@ public class FacilityController {
     public String updateFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
+                                 @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable,Facility facility) {
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch, pageable);
+        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
+            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
-            model.addAttribute("hasErr", "true");
+            model.addAttribute("rentTypeService", rentTypeService.getListRentType());
+            model.addAttribute("hasError", "true");
             return "view/facility/listFacility";
         }
         BeanUtils.copyProperties(facilityDto, facility);
@@ -80,5 +94,10 @@ public class FacilityController {
         redirectAttributes.addFlashAttribute("mess", "Sửa thành công cơ sở hạ tầng");
         return "redirect:/facility";
     }
-
+    @PostMapping("/delete")
+    public String deleteFacility(@RequestParam int id, RedirectAttributes redirectAttributes){
+        facilityService.deleteFacility(id);
+        redirectAttributes.addFlashAttribute("mess","Xóa cơ sở thành cồng");
+        return "redirect:/facility";
+    }
 }

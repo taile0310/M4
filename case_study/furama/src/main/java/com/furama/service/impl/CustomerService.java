@@ -1,7 +1,7 @@
 package com.furama.service.impl;
 
 import com.furama.model.customer.Customer;
-import com.furama.model.customer.CustomerType;
+
 import com.furama.repository.ICustomerRepository;
 import com.furama.service.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,6 @@ public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
 
-    @Override
-    public List<Customer> getListCustomer() {
-        return customerRepository.findAll();
-    }
 
     @Override
     public void saveCustomer(Customer customer) {
@@ -32,8 +28,12 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public Page<Customer> searchForThreeField(String name, String email, String customerType ,Pageable pageable) {
-        return customerRepository.findByNameContainingAndEmailContainingAndCustomerType(name, email,customerType, pageable);
+    public Page<Customer> searchForThreeField(String name, String email, int customerType, Pageable pageable) {
+        return customerRepository.findByNameContainingAndEmailContainingAndCustomerType_Id(name, email, customerType, pageable);
     }
 
+    @Override
+    public Page<Customer> customerPage(String name, String email, Pageable pageable) {
+        return customerRepository.findByNameContainingAndEmailContaining(name, email, pageable);
+    }
 }
