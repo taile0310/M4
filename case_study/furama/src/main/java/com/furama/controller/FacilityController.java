@@ -34,12 +34,12 @@ public class FacilityController {
     public String getListFacility(@RequestParam(required = false, defaultValue = "") String nameSearch,
                                   @RequestParam(required = false, defaultValue = "0") int facilityTypeSearch,
                                   @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
-                                  Model model){
+                                  Model model) {
         Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
-        if (facilityTypeSearch == 0){
-            model.addAttribute("facilityPage", facilityPage);
-        }else {
-            facilityService.searchForTwoField(nameSearch,facilityTypeSearch,pageable);
+        if (facilityTypeSearch == 0) {
+            model.addAttribute("facilityPage",facilityPage);
+        } else {
+            model.addAttribute("facilityPage",facilityService.searchForTwoField(nameSearch, facilityTypeSearch, pageable));
         }
         model.addAttribute("name", nameSearch);
         model.addAttribute("facilityType", facilityTypeSearch);
@@ -53,15 +53,16 @@ public class FacilityController {
     public String addNewFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
+                                 @RequestParam(required = false, defaultValue = "0") int facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
+        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch, facilityTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
+            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
-
             model.addAttribute("rentTypeService", rentTypeService.getListRentType());
             model.addAttribute("hasErr", "true");
             return "view/facility/listFacility";
@@ -77,12 +78,14 @@ public class FacilityController {
     public String updateFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
+                                 @RequestParam(required = false, defaultValue = "0") int facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
-                                         direction = Sort.Direction.ASC) Pageable pageable,Facility facility) {
-        Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
+                                         direction = Sort.Direction.ASC) Pageable pageable, Facility facility) {
+        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch, facilityTypeSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
+            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
             model.addAttribute("rentTypeService", rentTypeService.getListRentType());
@@ -94,10 +97,11 @@ public class FacilityController {
         redirectAttributes.addFlashAttribute("mess", "Sửa thành công cơ sở hạ tầng");
         return "redirect:/facility";
     }
+
     @PostMapping("/delete")
-    public String deleteFacility(@RequestParam int id, RedirectAttributes redirectAttributes){
+    public String deleteFacility(@RequestParam int id, RedirectAttributes redirectAttributes) {
         facilityService.deleteFacility(id);
-        redirectAttributes.addFlashAttribute("mess","Xóa cơ sở thành cồng");
+        redirectAttributes.addFlashAttribute("mess", "Xóa cơ sở thành cồng");
         return "redirect:/facility";
     }
 }
