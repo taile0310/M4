@@ -14,16 +14,16 @@ import java.util.Set;
 public class User {
     @Id
     @Column(length = 225)
-    private String userName;
+    private String username;
     @Column(length = 225)
     @NotNull
     @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "userName")
+    @OneToMany(mappedBy = "username")
     private Set<UserRole> userRoleSet;
 
-    @OneToMany(mappedBy = "userName")
+    @OneToMany(mappedBy = "username")
     private Set<Employee> employeeSet;
 
     public User() {
@@ -37,12 +37,12 @@ public class User {
         this.employeeSet = employeeSet;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPassword() {

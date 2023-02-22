@@ -32,7 +32,8 @@ public class CustomerController {
             @RequestParam(required = false, defaultValue = "") String nameSearch,
             @RequestParam(required = false, defaultValue = "") String emailSearch,
             @RequestParam(required = false, defaultValue = "0") int customerTypeSearch,
-            @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable, Model model) {
+            @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
+            Model model) {
         Page<Customer> customerPage = customerService.customerPage(nameSearch,emailSearch,pageable);
         if (customerTypeSearch == 0) {
             model.addAttribute("customerPage",customerPage);
@@ -52,15 +53,13 @@ public class CustomerController {
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
-                                 @RequestParam(required = false, defaultValue = "") int customerTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
+        Page<Customer> customerPage = customerService.customerPage(nameSearch, emailSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerPage);
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
-            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("customerDto", customerDto);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
             model.addAttribute("hasErr", "true");
@@ -77,16 +76,14 @@ public class CustomerController {
     public String updateCustomer(@Validated @ModelAttribute CustomerDto customerDto, BindingResult bindingResult, Customer customer,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
-                                 @RequestParam(required = false, defaultValue = "") int customerTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable,
                                  RedirectAttributes redirectAttributes, Model model) {
-        Page<Customer> customerPage = customerService.searchForThreeField(nameSearch, emailSearch, customerTypeSearch, pageable);
+        Page<Customer> customerPage = customerService.customerPage(nameSearch, emailSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerPage", customerPage);
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
-            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("customerDto", customerDto);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
             model.addAttribute("hasError", "true");

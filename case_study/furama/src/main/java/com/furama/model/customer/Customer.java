@@ -29,7 +29,7 @@ public class Customer {
     @Column(length = 45)
     private String address;
     @ManyToOne
-    @JoinColumn(name = "customerType", referencedColumnName = "id")
+    @JoinColumn(name = "customerType_id", referencedColumnName = "id")
     private CustomerType customerType;
 
     @OneToMany(mappedBy = "customer")

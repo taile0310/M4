@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
-
+    <link rel="stylesheet" href="/my.css">
 </head>
 <body>
 <!--    navbar-->
@@ -20,14 +20,14 @@
                     aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <a style="color: white;" class="navbar-brand" href="/home">Home</a>
+            <a style="color: white" class="navbar-brand" href="/home">Home</a>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a style="color: white;" class="nav-link active" aria-current="page" href="/facility-type">Facility Type</a>
+                        <a style="color: white" class="nav-link active" aria-current="page" href="/facility-type">Facility Type</a>
                     </li>
                     <li class="nav-item">
-                        <a style="color: white;" class="nav-link active" aria-current="page" href="/rent-type">Rent Type</a>
+                        <a style="color: white" class="nav-link active" aria-current="page" href="/rent-type">Rent Type</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +48,7 @@
     </div>
 </div>
 <marquee th:text="${mess}"></marquee>
-<table>
+<table class="table table-view table-bordered">
     <tr>
         <th>STT</th>
         <th>Ngày bắt đầu</th>
@@ -57,10 +57,11 @@
         <th>Nhân viên</th>
         <th>Khách hàng</th>
         <th>Cơ sở </th>
+        <th>Tổng tiền </th>
         <th>Sửa thông tin</th>
         <th>Xóa cơ sở</th>
     </tr>
-    <tr th:each="contract : ${contractList}">
+    <tr th:each="contract : ${contractPage}">
         <td th:text="${contract.id}"></td>
         <td th:text="${contract.startDay}"></td>
         <td th:text="${contract.endDay}"></td>
@@ -68,6 +69,7 @@
         <td th:text="${contract.employee.getName()}"></td>
         <td th:text="${contract.customer.getName()}"></td>
         <td th:text="${contract.facility.getName()}"></td>
+        <td th:text="${contract.total}"></td>
         <td>
             <button type="button" class="btn btn-outline-secondary"
                     th:attr="onclick=|idUpdate('${contract.id}','${contract.startDay}','${contract.endDay}',
@@ -87,129 +89,107 @@
         </td>
     </tr>
 </table>
-</body>
 <!--MODAL ADD-->
-<!--<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"-->
-<!--     id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true"-->
-<!--     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd"></h1>-->
-<!--                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="d-flex justify-content-center">-->
-<!--                    <input hidden type="text" id="facilityTypeId">-->
-<!--                    <button type="button" class="btn btn-outline-success" onclick="addVilla()">Villa</button>-->
-<!--                    <button type="button" class="btn btn-outline-success" onclick="addHouse()">House</button>-->
-<!--                    <button type="button" class="btn btn-outline-success" onclick="addRoom()">Room</button>-->
-<!--                </div>-->
-<!--                <form th:action="@{/facility/save}" method="post" th:object="${facilityDto}">-->
-<!--                    <table>-->
-<!--                        <legend>Thêm Cơ Sở</legend>-->
-<!--                        <tr>-->
-<!--                            <td>Tên cơ sở</td>-->
-<!--                            <td>-->
-<!--                                <input type="text" th:field="*{name}"/>-->
-<!--                                <span style="color: red" th:if="${#fields.hasErrors('name')}"-->
-<!--                                      th:errors="*{name}"></span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td> Diện tích</td>-->
-<!--                            <td>-->
-<!--                                <input type="number" th:field="*{area}"/>-->
-<!--                            </td>-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/contract/save}" method="post" th:object="${contractDto}">
+                    <table>
+                        <legend>Thêm Hợp Đồng</legend>
+                        <tr>
+                            <td>Ngày bắt đầu</td>
+                            <td>
+                                <input type="date" th:field="*{startDay}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('startDay')}"
+                                      th:errors="*{startDay}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td> Ngày kết thúc</td>
+                            <td>
+                                <input type="date" th:field="*{endDay}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('endDay')}"
+                                      th:errors="*{endDay}"></span>
+                            </td>
 
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td> Giá thuê</td>-->
-<!--                            <td>-->
-<!--                                <input type="number" th:field="*{cost}"/>-->
-<!--                                <span style="color: red"-->
-<!--                                      th:if="${#fields.hasErrors('cost')}"-->
-<!--                                      th:errors="*{cost}"></span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>Số người tối đa</td>-->
-<!--                            <td>-->
-<!--                                <input type="number" th:field="*{maxPeople}"/>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr id="standardRoom">-->
-<!--                            <td>Tiêu chuẩn phòng</td>-->
-<!--                            <td>-->
-<!--                                <input type="text" th:field="*{standardRoom}"/>-->
-<!--                                <span style="color: red" th:if="${#fields.hasErrors('standardRoom')}"-->
-<!--                                      th:errors="*{standardRoom}"></span>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr id="description">-->
-<!--                            <td>Mô tả</td>-->
-<!--                            <td>-->
-<!--                                <input type="text" th:field="*{descriptionOtherConvenience}"/>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr id="poolArea">-->
-<!--                            <td>Diện tích hồ bơi</td>-->
-<!--                            <td>-->
-<!--                                <input type="text" th:field="*{poolArea}"/>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr id="numberOfFloors">-->
-<!--                            <td>Số tầng</td>-->
-<!--                            <td>-->
-<!--                                <input th:field="*{numberOfFloor}"/>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr id="facilityFree">-->
-<!--                            <td>Dịch vụ miễn phí</td>-->
-<!--                            <td>-->
-<!--                                <input th:field="*{facilityFree}"/>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-
-<!--                        <tr>-->
-<!--                            <td>Kiểu thuê</td>-->
-<!--                            <td>-->
-<!--                                <select th:field="*{rentType}">-->
-<!--                                    <option th:each="rentType: ${rentTypeService}"-->
-<!--                                            th:text="${rentType.getName()}"-->
-<!--                                            th:value="${rentType.getId()}">-->
-<!--                                    </option>-->
-<!--                                    <span style="color: red" th:if="${#fields.hasErrors('rentType')}"></span>-->
-<!--                                </select>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                        <tr>-->
-<!--                            <td>Loại cơ sở</td>-->
-<!--                            <td>-->
-<!--                                <select th:field="*{facilityType}">-->
-<!--                                    <option th:each="facilityType: ${getListFacilityType}"-->
-<!--                                            th:text="${facilityType.getName()}"-->
-<!--                                            th:value="${facilityType.getId()}">-->
-<!--                                    </option>-->
-<!--                                    <span style="color: red" th:if="${#fields.hasErrors('facilityType')}"></span>-->
-<!--                                </select>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                    </table>-->
-<!--                    <div class="modal-footer">-->
-<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"-->
-<!--                                th:attr="onclick=|onCloseModal()|">Đóng-->
-<!--                        </button>-->
-<!--                        <button type="submit" class="btn btn-primary">Thêm cơ sở</button>-->
-<!--                    </div>-->
-<!--                </form>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+                        </tr>
+                        <tr>
+                            <td>Tiền đặt cọc</td>
+                            <td>
+                                <input type="number" th:field="*{deposit}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nhân viên tạo hợp đồng</td>
+                            <td>
+                                <select th:field="*{employee}">
+                                    <option th:each="employee: ${listEmployee}"
+                                            th:text="${employee.getName()}"
+                                            th:value="${employee.getId()}"></option>
+                                </select>
+<!--                                <input type="text" th:field="*{employee}"/>;-->
+                                <span style="color: red" th:if="${#fields.hasErrors('employee')}"
+                                      th:errors="*{employee}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Khách hàng</td>
+                            <td>
+                                <select th:field="*{customer}">
+                                    <option th:each="customer: ${listCustomer}"
+                                            th:text="${customer.getName()}"
+                                            th:value="${customer.getId()}"></option>
+                                </select>
+<!--                                <input type="text" th:field="*{customer}"/>-->
+                                <span style="color: red" th:if="${#fields.hasErrors('customer')}"
+                                      th:errors="*{customer}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cơ sở</td>
+                            <td>
+                                <select th:field="*{facility}">
+                                    <option th:each="facility: ${listFacility}"
+                                            th:text="${facility.getName()}"
+                                            th:value="${facility.getId()}"></option>
+                                </select>
+<!--                                <input type="text" th:field="*{facility}"/>-->
+                                <span style="color: red" th:if="${#fields.hasErrors('facility')}"
+                                      th:errors="*{facility}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tổng tiền</td>
+                            <td><input type="number" th:field="*{total}"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Đóng
+                        </button>
+                        <button type="submit" class="btn btn-primary">Thêm hợp đồng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<div th:replace="~{furama :: footer}"></div>
 </html>
+
+<script>
+    // ĐÓNG MODAL
+    function onCloseModal() {
+        document.getElementById('exampleModalAdd').style.display = 'none';
+        document.getElementById('exampleModalUpdate').style.display = 'none';
+        window.location.href = "/customer";
+    }
+</script>

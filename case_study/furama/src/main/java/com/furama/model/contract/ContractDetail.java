@@ -6,14 +6,13 @@ import javax.persistence.*;
 public class ContractDetail {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-
     private int id;
     private int quantity;
     @ManyToOne
-    @JoinColumn(name = "contract", referencedColumnName = "id")
+    @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private Contract contract;
     @ManyToOne
-    @JoinColumn(name = "attachFacility",referencedColumnName = "id")
+    @JoinColumn(name = "attachFacility_id",referencedColumnName = "id")
     private AttachFacility attachFacility;
 
     public ContractDetail() {

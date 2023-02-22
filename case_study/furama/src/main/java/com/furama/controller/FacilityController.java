@@ -32,11 +32,15 @@ public class FacilityController {
 
     @GetMapping("")
     public String getListFacility(@RequestParam(required = false, defaultValue = "") String nameSearch,
-                                  @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
+                                  @RequestParam(required = false, defaultValue = "0") int facilityTypeSearch,
                                   @PageableDefault(size = 3, page = 0, sort = "id", direction = Sort.Direction.ASC) Pageable pageable,
                                   Model model){
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
-        model.addAttribute("facilityPage", facilityPage);
+        Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
+        if (facilityTypeSearch == 0){
+            model.addAttribute("facilityPage", facilityPage);
+        }else {
+            facilityService.searchForTwoField(nameSearch,facilityTypeSearch,pageable);
+        }
         model.addAttribute("name", nameSearch);
         model.addAttribute("facilityType", facilityTypeSearch);
         model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
@@ -49,14 +53,12 @@ public class FacilityController {
     public String addNewFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
-                                 @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
+        Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
-            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
 
@@ -75,14 +77,12 @@ public class FacilityController {
     public String updateFacility(@Validated @ModelAttribute FacilityDto facilityDto, BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
-                                 @RequestParam(required = false, defaultValue = "") String facilityTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable,Facility facility) {
-        Page<Facility> facilityPage = facilityService.searchForTwoField(nameSearch,facilityTypeSearch, pageable);
+        Page<Facility> facilityPage = facilityService.findByNameContaining(nameSearch, pageable);
         if (bindingResult.hasErrors()) {
             model.addAttribute("facilityPage", facilityPage);
             model.addAttribute("name", nameSearch);
-            model.addAttribute("facilityType", facilityTypeSearch);
             model.addAttribute("facilityDto", facilityDto);
             model.addAttribute("getListFacilityType", facilityTypeService.getListFacilityType());
             model.addAttribute("rentTypeService", rentTypeService.getListRentType());

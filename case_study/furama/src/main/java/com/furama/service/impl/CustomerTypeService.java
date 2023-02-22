@@ -22,7 +22,6 @@ public class CustomerTypeService implements ICustomerTypeService {
     @Override
     public void saveCustomerType(CustomerType customerType) {
         customerTypeRepository.save(customerType);
-
     }
 
     @Override

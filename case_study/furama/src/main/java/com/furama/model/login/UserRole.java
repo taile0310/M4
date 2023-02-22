@@ -8,12 +8,12 @@ public class UserRole {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "role", referencedColumnName = "id")
+    @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "userName", referencedColumnName = "userName")
-    private User userName;
+    @JoinColumn(name = "username", referencedColumnName = "username")
+    private User username;
 
     public UserRole() {
     }
@@ -34,11 +34,11 @@ public class UserRole {
         this.role = roleId;
     }
 
-    public User getUserName() {
-        return userName;
+    public User getUsername() {
+        return username;
     }
 
-    public void setUserName(User userName) {
-        this.userName = userName;
+    public void setUsername(User userName) {
+        this.username = userName;
     }
 }

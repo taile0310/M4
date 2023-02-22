@@ -4,16 +4,18 @@ import com.furama.model.contract.Contract;
 import com.furama.repository.IContractRepository;
 import com.furama.service.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
 @Service
 public class ContractService implements IContractService {
     @Autowired
     private IContractRepository  contractRepository;
+
     @Override
-    public List<Contract> getListContract() {
-        return contractRepository.findAll();
+    public Page<Contract> findAll(Pageable pageable) {
+        return contractRepository.findAll(pageable);
     }
 
     @Override

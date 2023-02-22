@@ -14,7 +14,6 @@ public class Facility {
     @Column(length = 45)
     private String name;
     private int area;
-
     private double cost;
     private int maxPeople;
 
@@ -27,10 +26,10 @@ public class Facility {
     private int numberOfFloor;
     private String facilityFree;
     @ManyToOne
-    @JoinColumn(name = "rentType", referencedColumnName = "id")
+    @JoinColumn(name = "rentType_id", referencedColumnName = "id")
     private RentType rentType;
     @ManyToOne
-    @JoinColumn(name = "facilityType", referencedColumnName = "id")
+    @JoinColumn(name = "facilityType_id", referencedColumnName = "id")
     private FacilityType facilityType;
     @OneToMany(mappedBy = "facility")
     private Set<Contract> contractSet;

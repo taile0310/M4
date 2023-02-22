@@ -16,5 +16,6 @@ public interface ICustomerService {
     Page<Customer> searchForThreeField(String name, String email, int customerType, Pageable pageable);
 
     Page<Customer> customerPage(String name, String email, Pageable pageable);
+    List<Customer> customerList();
 
 }

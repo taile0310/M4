@@ -30,9 +30,15 @@ public class FacilityService implements IFacilityService {
         facilityRepository.deleteById(id);
     }
 
+
     @Override
-    public Page<Facility> searchForTwoField(String name, String facilityType, Pageable pageable) {
-        return facilityRepository.findByNameContainingAndFacilityType(name, facilityType , pageable );
+    public Page<Facility> searchForTwoField(String name, int facilityType,Pageable pageable) {
+        return facilityRepository.findByNameContainingAndFacilityType_Id(name, facilityType,pageable);
+    }
+
+    @Override
+    public Page<Facility> findByNameContaining(String name,Pageable pageable) {
+        return facilityRepository.findByNameContaining(name,pageable);
     }
 
 

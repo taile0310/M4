@@ -8,10 +8,8 @@ import java.util.Set;
 public class FacilityType {
     @Id
     @GeneratedValue( strategy = GenerationType.IDENTITY)
-
     private int id;
     @NotNull
-
     private String name;
 
     @OneToMany(mappedBy = "facilityType")

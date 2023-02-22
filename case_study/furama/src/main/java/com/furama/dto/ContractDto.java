@@ -1,39 +1,28 @@
-package com.furama.model.contract;
+package com.furama.dto;
 
 import com.furama.model.customer.Customer;
 import com.furama.model.employee.Employee;
 import com.furama.model.facility.Facility;
 
+import javax.validation.constraints.NotEmpty;
 
-import javax.persistence.*;
-import java.util.Set;
-
-@Entity
-public class Contract {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ContractDto {
     private int id;
+    @NotEmpty(message = "Ngày đặt dịch vụ không được để trống")
     private String startDay;
+    @NotEmpty(message = "Ngày trả không được để trống")
     private String endDay;
     private double deposit;
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")
+//    @NotEmpty(message = "Tên nhân viên không được để trống")
     private Employee employee;
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id")
+//    @NotEmpty(message = "Tên khách hàng không được để trống")
     private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "facility_id",referencedColumnName = "id")
+//    @NotEmpty(message = "Tên cơ sở không được để trống")
     private Facility facility;
 
     private double total;
 
-    @OneToMany(mappedBy = "contract")
-    private Set<ContractDetail> contractDetailSet;
-
-
-    public Contract() {
+    public ContractDto() {
     }
 
     public int getId() {
@@ -90,14 +79,6 @@ public class Contract {
 
     public void setFacility(Facility facility) {
         this.facility = facility;
-    }
-
-    public Set<ContractDetail> getContractDetailSet() {
-        return contractDetailSet;
-    }
-
-    public void setContractDetailSet(Set<ContractDetail> contractDetailSet) {
-        this.contractDetailSet = contractDetailSet;
     }
 
     public double getTotal() {

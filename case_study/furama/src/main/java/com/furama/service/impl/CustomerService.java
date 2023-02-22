@@ -36,4 +36,9 @@ public class CustomerService implements ICustomerService {
     public Page<Customer> customerPage(String name, String email, Pageable pageable) {
         return customerRepository.findByNameContainingAndEmailContaining(name, email, pageable);
     }
+
+    @Override
+    public List<Customer> customerList() {
+        return customerRepository.findAll();
+    }
 }

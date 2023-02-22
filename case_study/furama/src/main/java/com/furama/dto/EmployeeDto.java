@@ -1,56 +1,29 @@
-package com.furama.model.employee;
+package com.furama.dto;
 
-import com.furama.model.contract.Contract;
+import com.furama.model.employee.Division;
+import com.furama.model.employee.EducationDegree;
+import com.furama.model.employee.Position;
 import com.furama.model.login.User;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
 
-@Entity
-public class Employee {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+import javax.validation.constraints.NotEmpty;
+
+public class EmployeeDto {
     private int id;
-    @NotNull
-    @Column(length = 45)
+    @NotEmpty(message = "Tên nhân viên không được để trống")
     private String name;
     private String dateOfBirth;
-
-    @Column(length = 45, unique = true)
     private String idCard;
     private double salary;
-    @Column(length = 10, unique = true)
+    @NotEmpty(message = "Số điện thoại không được để trống")
     private String phoneNumber;
-
-    @Column(length = 45, unique = true)
     private String email;
-    @Column(length = 45)
     private String address;
-    @ManyToOne
-    @JoinColumn(name = "username", referencedColumnName = "username")
     private User username;
-    @ManyToOne
-    @JoinColumn(name = "position_id", referencedColumnName = "id")
     private Position position;
-    @ManyToOne
-    @JoinColumn(name = "educationDegree_id", referencedColumnName = "id")
     private EducationDegree educationDegree;
-    @ManyToOne
-    @JoinColumn(name = "division_id", referencedColumnName = "id")
     private Division division;
 
-    @OneToMany(mappedBy = "employee")
-    private Set<Contract> contractSet;
-
-
-    public Employee() {
-    }
-    public Set<Contract> getContractSet() {
-        return contractSet;
-    }
-
-    public void setContractSet(Set<Contract> contractSet) {
-        this.contractSet = contractSet;
+    public EmployeeDto() {
     }
 
     public int getId() {
@@ -121,8 +94,8 @@ public class Employee {
         return username;
     }
 
-    public void setUsername(User userName) {
-        this.username = userName;
+    public void setUsername(User username) {
+        this.username = username;
     }
 
     public Position getPosition() {
