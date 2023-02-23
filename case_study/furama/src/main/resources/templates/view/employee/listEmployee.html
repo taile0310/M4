@@ -24,13 +24,13 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/position">Position </a>
+                        <a style="color:white" class="nav-link active" aria-current="page" href="/position">Position </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/education">Education </a>
+                        <a style="color:white" class="nav-link active" aria-current="page" href="/education">Education </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/division">Division </a>
+                        <a style="color:white" class="nav-link active" aria-current="page" href="/division">Division </a>
                     </li>
                 </ul>
             </div>
@@ -83,12 +83,13 @@
     </tr>
 </table>
 <div>
-    <a th:href="@{/employee(page=${employeePage.number - 1}, nameSearch=${nameSearch}) }"
+    <a th:href="@{/employee(page=${employeePage.number - 1}, nameSearch=${name}) }"
        th:if="${employeePage.hasPrevious()}">Trước</a>
     <span th:text="${employeePage.number + 1}"></span>/<span th:text="${employeePage.totalPages}"></span>
-    <a th:href="@{/employee(page=${employeePage.number + 1}, nameSearch=${nameSearch} ) }"
+    <a th:href="@{/employee(page=${employeePage.number + 1}, nameSearch=${name} ) }"
        th:if="${employeePage.hasNext()}">sau</a>
 </div>
+<div th:replace="~{furama :: footer}"></div>
 
 <!--MODAL ADD-->
 <div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
@@ -107,7 +108,7 @@
                         <tr>
                             <td>Tên nhân viên</td>
                             <td>
-                                <input type="date" th:field="*{name}"/>
+                                <input type="text" th:field="*{name}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('name')}"
                                       th:errors="*{name}"></span>
                             </td>
@@ -117,7 +118,6 @@
                             <td>
                                 <input type="date" th:field="*{dateOfBirth}"/>
                             </td>
-
                         </tr>
                         <tr>
                             <td>Căn cước</td>
@@ -142,50 +142,67 @@
                         <tr>
                             <td>Email</td>
                             <td>
-
                                 <input type="text" th:field="*{email}"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Địa chỉ</td>
-                            <td><input type="number" th:field="*{address}"></td>
+                            <td><input type="text" th:field="*{address}"></td>
                         </tr>
                         <tr>
                             <td>Tài khoản</td>
-                            <td><input type="number" th:field="*{username}"></td>
+                            <td><input type="text" th:field="*{username}"></td>
                         </tr>
                         <tr>
                             <td>Chức vụ</td>
-                            <td><input type="number" th:field="*{position}"></td>
+                            <td>
+                                <select th:field="*{position}">
+                                    <option th:each="positionService: ${positionService}"
+                                            th:text="${positionService.getName()}"
+                                            th:value="${positionService.getId()}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td>Trình độ</td>
-                            <td><input type="number" th:field="*{educationDegree}"></td>
+                            <td>
+                                <select th:field="*{educationDegree}">
+                                    <option th:each="educationService: ${educationService}"
+                                            th:text="${educationService.getName()}"
+                                            th:value="${educationService.getId()}"></option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td>Bộ phận</td>
-                            <td><input type="number" th:field="*{division}"></td>
+                            <td>
+                                <select th:field="*{division}">
+                                    <option th:each="divisionService: ${divisionService}"
+                                            th:text="${divisionService.getName()}"
+                                            th:value="${divisionService.getId()}"></option>
+                                </select>
+                            </td>
                         </tr>
                     </table>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                 th:attr="onclick=|onCloseModal()|">Đóng
                         </button>
-                        <button type="submit" class="btn btn-primary">Thêm hợp đồng</button>
+                        <button type="submit" class="btn btn-primary">Thêm nhân viên</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
-</body>
-<div th:replace="~{furama :: footer}"></div>
-</html>
+
 <script>
     // ĐÓNG MODAL
     function onCloseModal() {
         document.getElementById('exampleModalAdd').style.display = 'none';
         document.getElementById('exampleModalUpdate').style.display = 'none';
-        window.location.href = "/customer";
+        window.location.href = "/employee";
     }
 </script>
+</body>
+</html>

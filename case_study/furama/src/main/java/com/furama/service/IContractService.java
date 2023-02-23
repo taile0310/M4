@@ -11,4 +11,5 @@ public interface IContractService {
 
     void saveContract(Contract contract);
     void deleteContract(int id);
+    Contract findById(int id);
 }

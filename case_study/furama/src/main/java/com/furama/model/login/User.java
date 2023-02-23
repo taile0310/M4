@@ -3,10 +3,7 @@ package com.furama.model.login;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.furama.model.employee.Employee;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -20,8 +17,9 @@ public class User {
     @JsonIgnore
     private String password;
 
-    @OneToMany(mappedBy = "username")
-    private Set<UserRole> userRoleSet;
+
+    @ManyToMany(mappedBy = "userSet")
+    private Set<Role> roleSet;
 
     @OneToMany(mappedBy = "username")
     private Set<Employee> employeeSet;
@@ -29,20 +27,12 @@ public class User {
     public User() {
     }
 
-    public Set<Employee> getEmployeeSet() {
-        return employeeSet;
-    }
-
-    public void setEmployeeSet(Set<Employee> employeeSet) {
-        this.employeeSet = employeeSet;
-    }
-
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -53,11 +43,19 @@ public class User {
         this.password = password;
     }
 
-    public Set<UserRole> getUserRoleSet() {
-        return userRoleSet;
+    public Set<Role> getRoleSet() {
+        return roleSet;
     }
 
-    public void setUserRoleSet(Set<UserRole> userRoleSet) {
-        this.userRoleSet = userRoleSet;
+    public void setRoleSet(Set<Role> userRoleSet) {
+        this.roleSet = userRoleSet;
+    }
+
+    public Set<Employee> getEmployeeSet() {
+        return employeeSet;
+    }
+
+    public void setEmployeeSet(Set<Employee> employeeSet) {
+        this.employeeSet = employeeSet;
     }
 }

@@ -28,4 +28,9 @@ public class ContractService implements IContractService {
         contractRepository.deleteById(id);
 
     }
+
+    @Override
+    public Contract findById(int id) {
+        return contractRepository.findById(id).orElse(null);
+    }
 }

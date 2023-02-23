@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-                                  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <link rel="stylesheet" href="/my.css">
 </head>
 <body>
@@ -24,10 +25,12 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a style="color: white" class="nav-link active" aria-current="page" href="/facility-type">Facility Type</a>
+                        <a style="color: white" class="nav-link active" aria-current="page" href="/facility-type">Facility
+                            Type</a>
                     </li>
                     <li class="nav-item">
-                        <a style="color: white" class="nav-link active" aria-current="page" href="/rent-type">Rent Type</a>
+                        <a style="color: white" class="nav-link active" aria-current="page" href="/rent-type">Rent
+                            Type</a>
                     </li>
                 </ul>
             </div>
@@ -56,13 +59,14 @@
         <th>Tiền cọc</th>
         <th>Nhân viên</th>
         <th>Khách hàng</th>
-        <th>Cơ sở </th>
-        <th>Tổng tiền </th>
+        <th>Cơ sở</th>
+        <th>Tổng tiền</th>
+        <th>Các dịch vụ đi kèm</th>
         <th>Sửa thông tin</th>
         <th>Xóa cơ sở</th>
     </tr>
     <tr th:each="contract : ${contractPage}">
-        <td th:text="${contract.id}"></td>
+        <td th:text="${contract.id}"><input id="idContract" th:value="${contract.id}" hidden></td>
         <td th:text="${contract.startDay}"></td>
         <td th:text="${contract.endDay}"></td>
         <td th:text="${contract.deposit}"></td>
@@ -70,6 +74,15 @@
         <td th:text="${contract.customer.getName()}"></td>
         <td th:text="${contract.facility.getName()}"></td>
         <td th:text="${contract.total}"></td>
+        <td>
+            <button onclick="viewAttachFacility()"
+                    type="button" class="btn btn-outline-secondary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModalView"
+                    data-bs-whatever="@mdo">Danh sách các dịch vụ đi kèm
+            </button>
+            <button type="submit" class="btn btn-outline-secondary">+</button>
+        </td>
         <td>
             <button type="button" class="btn btn-outline-secondary"
                     th:attr="onclick=|idUpdate('${contract.id}','${contract.startDay}','${contract.endDay}',
@@ -89,6 +102,37 @@
         </td>
     </tr>
 </table>
+
+<!--MODAL ADD DỊCH VỤ ĐI KÈM-->
+<div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="exampleModalAdd1" tabindex="-1" aria-labelledby="exampleModalLabelAdd1" aria-hidden="true"
+     th:style="${hasErr == 'true' ? 'display: block' : 'display: none'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd1"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td>
+                                <select id="attachFacility"></select>
+                            </td>
+                            <td><input type="number" placeholder="Nhập vào số lượng" id="quantity"></td>
+                        </tr>
+                    </table>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Đóng
+                        </button>
+                        <button type="submit" class="btn btn-primary" onclick="toTal()">Thêm</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--MODAL ADD-->
 <div th:class="${hasErr == 'true' ? 'modal fade show' : 'modal fade'}"
      id="exampleModalAdd" tabindex="-1" aria-labelledby="exampleModalLabelAdd" aria-hidden="true"
@@ -106,7 +150,7 @@
                         <tr>
                             <td>Ngày bắt đầu</td>
                             <td>
-                                <input type="date" th:field="*{startDay}"/>
+                                <input type="datetime-local" th:field="*{startDay}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('startDay')}"
                                       th:errors="*{startDay}"></span>
                             </td>
@@ -114,7 +158,7 @@
                         <tr>
                             <td> Ngày kết thúc</td>
                             <td>
-                                <input type="date" th:field="*{endDay}"/>
+                                <input type="datetime-local" th:field="*{endDay}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('endDay')}"
                                       th:errors="*{endDay}"></span>
                             </td>
@@ -134,7 +178,6 @@
                                             th:text="${employee.getName()}"
                                             th:value="${employee.getId()}"></option>
                                 </select>
-<!--                                <input type="text" th:field="*{employee}"/>;-->
                                 <span style="color: red" th:if="${#fields.hasErrors('employee')}"
                                       th:errors="*{employee}"></span>
                             </td>
@@ -147,7 +190,6 @@
                                             th:text="${customer.getName()}"
                                             th:value="${customer.getId()}"></option>
                                 </select>
-<!--                                <input type="text" th:field="*{customer}"/>-->
                                 <span style="color: red" th:if="${#fields.hasErrors('customer')}"
                                       th:errors="*{customer}"></span>
                             </td>
@@ -155,19 +197,28 @@
                         <tr>
                             <td>Cơ sở</td>
                             <td>
-                                <select th:field="*{facility}">
+                                <select th:field="*{facility}" id="facility">
                                     <option th:each="facility: ${listFacility}"
                                             th:text="${facility.getName()}"
                                             th:value="${facility.getId()}"></option>
                                 </select>
-<!--                                <input type="text" th:field="*{facility}"/>-->
                                 <span style="color: red" th:if="${#fields.hasErrors('facility')}"
                                       th:errors="*{facility}"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Tổng tiền</td>
-                            <td><input type="number" th:field="*{total}"></td>
+                            <td><input type="number" th:field="*{total}" id="total"></td>
+                        </tr>
+                        <tr>
+                            <td>Dịch vụ di kèm</td>
+                            <td>
+                                <button onclick="getFacilityList() "
+                                        type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModalAdd1"
+                                        data-bs-whatever="@mdo">+
+                                </button>
+                            </td>
                         </tr>
                     </table>
                     <div class="modal-footer">
@@ -181,6 +232,38 @@
         </div>
     </div>
 </div>
+
+<!--MODAL VIEW-->
+<div class="modal fade" id="exampleModalView" tabindex="-1" aria-labelledby="exampleModalLabelView"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelView"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <center><h3>Danh sách dịch vụ đi kèm</h3></center>
+                <table class="table table-view table-bordered">
+                    <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên dịch vụ đi kèm</th>
+                        <th>Giá</th>
+                        <th>Đơn vị</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 <div th:replace="~{furama :: footer}"></div>
 </html>
@@ -190,6 +273,68 @@
     function onCloseModal() {
         document.getElementById('exampleModalAdd').style.display = 'none';
         document.getElementById('exampleModalUpdate').style.display = 'none';
-        window.location.href = "/customer";
+        window.location.href = "/contract";
+    }
+</script>
+
+<script>
+    function viewAttachFacility() {
+        let idContract = parseInt(document.getElementById('idContract').value);
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/api/attach-facility?idContract=" + idContract,
+
+            success: function (data) {
+                console.log(data);
+                let content = '';
+                for (let i = 0; i < data.length; i++) {
+                    content += `<tr>`
+                    content += `<td>${data[i].id}</td>`
+                    content += `<td>${data[i].name}</td>`
+                    content += `<td>${data[i].cost}</td>`
+                    content += `<td>${data[i].unit}</td>`
+                    content += `<td>${data[i].status}</td>`
+                    content += `</tr>`
+                    debugger
+                }
+                $('#tbody').html(content);
+
+            }
+        })
+    }
+
+
+    function getFacilityList(){
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/api",
+            success: function (data) {
+                console.log(data);
+                let content = '';
+                for (let i = 0; i < data.length; i++) {
+                    content += `<option th:value='${data[i].id}' >${data[i].name}</option>`
+                }
+                $('#attachFacility').html(content);
+
+            }
+        })
+    }
+
+    function toTal(){
+        let quantity = document.getElementById('quantity').value;
+        let attachFacility = document.getElementById('attachFacility').value;
+        let facility = document.getElementById('facility').value;
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/api/total?quantity=" + quantity + "&&attachFacility=" + attachFacility + "&&facility=" + facility,
+            success: function (data){
+                total += data
+                document.getElementById('total').value = total;
+
+            }
+        })
     }
 </script>

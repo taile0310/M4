@@ -13,8 +13,9 @@ public class Role {
     @NotNull
     private String name;
 
-    @OneToMany(mappedBy = "role")
-    private Set<UserRole> userRoleSet;
+    @ManyToMany
+    @JoinTable(name = "role_user", joinColumns = @JoinColumn(name = "role_id"),inverseJoinColumns = @JoinColumn(name = "username"))
+    private Set<User> userSet;
 
     public Role() {
     }
@@ -35,11 +36,11 @@ public class Role {
         this.name = name;
     }
 
-    public Set<UserRole> getUserRoleSet() {
-        return userRoleSet;
+    public Set<User> getUserSet() {
+        return userSet;
     }
 
-    public void setUserRoleSet(Set<UserRole> userRoleSet) {
-        this.userRoleSet = userRoleSet;
+    public void setUserSet(Set<User> userRoleSet) {
+        this.userSet = userRoleSet;
     }
 }

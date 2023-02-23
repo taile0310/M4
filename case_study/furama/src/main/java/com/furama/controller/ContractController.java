@@ -2,10 +2,7 @@ package com.furama.controller;
 
 import com.furama.dto.ContractDto;
 import com.furama.model.contract.Contract;
-import com.furama.service.IContractService;
-import com.furama.service.ICustomerService;
-import com.furama.service.IEmployeeService;
-import com.furama.service.IFacilityService;
+import com.furama.service.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +34,9 @@ public class ContractController {
     @Autowired
     private IFacilityService facilityService;
 
+    @Autowired
+    private IAttachFacilityService attachFacilityService;
+
     @GetMapping("")
     public String getListContract(Model model,
                                   @PageableDefault(size = 3, page = 0, sort = "id",
@@ -46,6 +46,7 @@ public class ContractController {
         model.addAttribute("listEmployee",employeeService.listEmployee());
         model.addAttribute("listCustomer",customerService.customerList());
         model.addAttribute("listFacility",facilityService.getListFacility());
+        model.addAttribute("attachFacilityService",attachFacilityService.getListAttachFacility());
         model.addAttribute("contractDto", new ContractDto());
         return "/view/contract/listContract";
     }
@@ -58,6 +59,7 @@ public class ContractController {
             model.addAttribute("listEmployee",employeeService.listEmployee());
             model.addAttribute("listCustomer",customerService.customerList());
             model.addAttribute("listFacility",facilityService.getListFacility());
+            model.addAttribute("attachFacilityService",attachFacilityService.getListAttachFacility());
             model.addAttribute("hasErr" ,"true");
             return "/view/contract/listContract";
         }
