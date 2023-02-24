@@ -22,18 +22,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a style="color: white" class="navbar-brand" href="/home">Home</a>
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a style="color: white" class="nav-link active" aria-current="page" href="/facility-type">Facility
-                            Type</a>
-                    </li>
-                    <li class="nav-item">
-                        <a style="color: white" class="nav-link active" aria-current="page" href="/rent-type">Rent
-                            Type</a>
-                    </li>
-                </ul>
-            </div>
         </div>
     </nav>
 </div>
@@ -66,7 +54,7 @@
         <th>Xóa cơ sở</th>
     </tr>
     <tr th:each="contract : ${contractPage}">
-        <td th:text="${contract.id}"><input id="idContract" th:value="${contract.id}" hidden></td>
+        <td th:text="${contract.id}"></td>
         <td th:text="${contract.startDay}"></td>
         <td th:text="${contract.endDay}"></td>
         <td th:text="${contract.deposit}"></td>
@@ -75,13 +63,17 @@
         <td th:text="${contract.facility.getName()}"></td>
         <td th:text="${contract.total}"></td>
         <td>
-            <button onclick="viewAttachFacility()"
+            <button th:attr="onclick=|viewAttachFacility('${contract.id}')|"
                     type="button" class="btn btn-outline-secondary"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModalView"
                     data-bs-whatever="@mdo">Danh sách các dịch vụ đi kèm
             </button>
-            <button type="submit" class="btn btn-outline-secondary">+</button>
+            <button th:attr="onclick=|getFacilityList('${contract.id}')|"
+                    type="button" class="btn btn-outline-success" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalAdd1"
+                    data-bs-whatever="@mdo">+
+            </button>
         </td>
         <td>
             <button type="button" class="btn btn-outline-secondary"
@@ -114,20 +106,21 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                    <table>
-                        <tr>
-                            <td>
-                                <select id="attachFacility"></select>
-                            </td>
-                            <td><input type="number" placeholder="Nhập vào số lượng" id="quantity"></td>
-                        </tr>
-                    </table>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                th:attr="onclick=|onCloseModal()|">Đóng
-                        </button>
-                        <button type="submit" class="btn btn-primary" onclick="toTal()">Thêm</button>
-                    </div>
+                <table>
+                    <h4>Hợp đồng chi tiết</h4>
+                    <tr>
+                        <td>
+                            <select id="attachFacility"></select>
+                        </td>
+                        <td><input type="number" id="idContract" hidden></td>
+                        <td><input type="number" placeholder="Nhập số lượng" id="quantity"></td>
+                    </tr>
+                </table>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                            onclick="addContractDetail()">Thêm
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -144,13 +137,13 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/contract/save}" method="post" th:object="${contractDto}">
+                <form action="/contract/save" method="post" th:object="${contractDto}">
                     <table>
                         <legend>Thêm Hợp Đồng</legend>
                         <tr>
                             <td>Ngày bắt đầu</td>
                             <td>
-                                <input type="datetime-local" th:field="*{startDay}"/>
+                                <input type="date" th:field="*{startDay}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('startDay')}"
                                       th:errors="*{startDay}"></span>
                             </td>
@@ -158,7 +151,7 @@
                         <tr>
                             <td> Ngày kết thúc</td>
                             <td>
-                                <input type="datetime-local" th:field="*{endDay}"/>
+                                <input type="date" th:field="*{endDay}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('endDay')}"
                                       th:errors="*{endDay}"></span>
                             </td>
@@ -197,7 +190,7 @@
                         <tr>
                             <td>Cơ sở</td>
                             <td>
-                                <select th:field="*{facility}" id="facility">
+                                <select th:field="*{facility}" id="facility" onchange="toTal()">
                                     <option th:each="facility: ${listFacility}"
                                             th:text="${facility.getName()}"
                                             th:value="${facility.getId()}"></option>
@@ -208,26 +201,61 @@
                         </tr>
                         <tr>
                             <td>Tổng tiền</td>
-                            <td><input type="number" th:field="*{total}" id="total"></td>
+                            <td><input type="number" th:field="*{total}" id="total" readonly></td>
                         </tr>
                         <tr>
                             <td>Dịch vụ di kèm</td>
                             <td>
-                                <button onclick="getFacilityList() "
+                                <button th:attr="onclick=|attachFacilityOnAddNewContract()|"
                                         type="button" class="btn btn-outline-success" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModalAdd1"
+                                        data-bs-target="#exampleModalAdd2"
                                         data-bs-whatever="@mdo">+
                                 </button>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <input id="listAttachFacility" name="listAttachFacility">
+                            </td>
+                            <td>
+                                <input id="listQuantity" name="listQuantity">
+                            </td>
+                        </tr>
                     </table>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                th:attr="onclick=|onCloseModal()|">Đóng
-                        </button>
-                        <button type="submit" class="btn btn-primary">Thêm hợp đồng</button>
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"-->
+<!--                                th:attr="onclick=|onCloseModal()|">Đóng-->
+<!--                        </button>-->
+                        <button type="submit" class="btn btn-primary" >Thêm hợp đồng</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL ADD DỊCH VỤ ĐI TRONG THÊM MỚI HỢP ĐỒNG-->
+<div class="modal fade" id="exampleModalAdd2" tabindex="-1"
+     aria-labelledby="exampleModalLabelAdd2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="justify-content-center modal-title fs-5" id="exampleModalLabelAdd2"></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table>
+                    <tr>
+                        <td>
+                            <select id="attachFacilityNew" ></select>
+                        </td>
+                        <td><input type="number" placeholder="Nhập số lượng" id="quantityNew"></td>
+                    </tr>
+                </table>
+                <div class="modal-footer">
+                    <button onclick="getDataAttachFacilityOnModal()" type="button"
+                            class="btn btn-primary" data-bs-target="#exampleModalAdd" data-bs-toggle="modal" >Thêm</button>
+                </div>
             </div>
         </div>
     </div>
@@ -243,7 +271,6 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
                 <center><h3>Danh sách dịch vụ đi kèm</h3></center>
                 <table class="table table-view table-bordered">
                     <thead>
@@ -265,6 +292,7 @@
     </div>
 </div>
 </body>
+
 <div th:replace="~{furama :: footer}"></div>
 </html>
 
@@ -278,8 +306,7 @@
 </script>
 
 <script>
-    function viewAttachFacility() {
-        let idContract = parseInt(document.getElementById('idContract').value);
+    function viewAttachFacility(idContract) {
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -296,44 +323,115 @@
                     content += `<td>${data[i].unit}</td>`
                     content += `<td>${data[i].status}</td>`
                     content += `</tr>`
-                    debugger
                 }
                 $('#tbody').html(content);
-
             }
+
         })
     }
+</script>
 
-
-    function getFacilityList(){
+<script>
+    // LẤY ĐUỢC LIST DỊCH VỤ ĐI KÈM VÀ CONTRACT ID VÀ MỞ ĐƯỢC MODAL NGAY CHỖ LIST
+    function getFacilityList(idContract) {
         $.ajax({
             type: "GET",
             dataType: "json",
             url: "http://localhost:8080/api",
             success: function (data) {
                 console.log(data);
+
                 let content = '';
                 for (let i = 0; i < data.length; i++) {
-                    content += `<option th:value='${data[i].id}' >${data[i].name}</option>`
+
+                    content += ` <option value='${data[i].id}' >${data[i].name}</option>`
+
                 }
+                document.getElementById('idContract').value = idContract;
                 $('#attachFacility').html(content);
+            }
+        })
+    }
+</script>
+
+<script>
+    // THÊM HỢP ĐỒNG CHI TIẾT
+    function addContractDetail() {
+        let quantity = parseInt(document.getElementById('quantity').value)
+        let attachFacility = parseInt(document.getElementById('attachFacility').value)
+        let contract = parseInt(document.getElementById('idContract').value)
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/api/addContractDetail?quantity=" + quantity + "&&attachFacilityId=" + attachFacility + "&&contractId=" + contract
+
+        })
+    }
+</script>
+
+<script>
+    // THÊM MỚI DỊCH VỤ ĐI KÈM TRONG THÊM MỚI HỢP ĐỒNG
+    function attachFacilityOnAddNewContract() {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "http://localhost:8080/api",
+            success: function (data) {
+                console.log(data);
+
+                let content = '';
+                for (let i = 0; i < data.length; i++) {
+
+                    content += ` <option value='${data[i].id}' >${data[i].name}</option>`
+
+                }
+                $('#attachFacilityNew').html(content);
 
             }
         })
     }
+</script>
 
-    function toTal(){
-        let quantity = document.getElementById('quantity').value;
-        let attachFacility = document.getElementById('attachFacility').value;
-        let facility = document.getElementById('facility').value;
+<script>
+    // SHOW RA LIST
+    let listId = [];
+    let listQuantity = [];
+
+    function getDataAttachFacilityOnModal() {
+        let id = document.getElementById('attachFacilityNew').value;
+        let quantity = document.getElementById('quantityNew').value;
+        listId.push(id);
+        listQuantity.push(quantity);
+        console.log(listId.toString())
+        document.getElementById('listAttachFacility').value = listId.toString();
+        document.getElementById('listQuantity').value = listQuantity.toString();
+      toTal()
+    }
+</script>
+
+<script>
+
+    let total = 0;
+
+    function toTal() {
+        let quantity = 0;
+        let attachFacility = 0;
+        // luôn luôn lúc nào cũng có cost
+        let facility = parseInt(document.getElementById('facility').value);
+        if (!isNaN(parseInt(document.getElementById('attachFacility').value))){
+            quantity = parseInt(document.getElementById('quantity').value);
+            attachFacility = parseInt(document.getElementById('attachFacility').value);
+        }
+        console.log(quantity + "thbthnh" )
+
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "http://localhost:8080/api/total?quantity=" + quantity + "&&attachFacility=" + attachFacility + "&&facility=" + facility,
-            success: function (data){
+            url: "http://localhost:8080/api/total?quantity=" + quantity + "&&attachFacilityId=" + attachFacility + "&&facilityId=" + facility,
+            success: function (data) {
                 total += data
                 document.getElementById('total').value = total;
-
             }
         })
     }

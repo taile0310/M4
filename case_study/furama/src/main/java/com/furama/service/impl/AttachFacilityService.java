@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class AttachFacilityService implements IAttachFacilityService {
     @Autowired
-    private IAttachFacilityRepository attachFacilityRepository;
+        private IAttachFacilityRepository attachFacilityRepository;
 
     @Override
     public List<AttachFacility> getListAttachFacility() {
@@ -21,5 +21,15 @@ public class AttachFacilityService implements IAttachFacilityService {
     @Override
     public double getTotalMoneyAdd(int quality, int attachFacilityId, int facilityId) {
         return attachFacilityRepository.getTotalMoneyAdd(quality, attachFacilityId, facilityId);
+    }
+
+    @Override
+    public double getCostFacility(int facilityId) {
+        return attachFacilityRepository.getCostFacility(facilityId);
+    }
+
+    @Override
+    public AttachFacility findById(int id) {
+       return attachFacilityRepository.findById(id).orElse(null);
     }
 }

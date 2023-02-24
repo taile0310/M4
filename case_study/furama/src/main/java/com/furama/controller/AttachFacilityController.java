@@ -4,6 +4,7 @@ import com.furama.model.contract.AttachFacility;
 import com.furama.model.contract.Contract;
 import com.furama.model.contract.ContractDetail;
 import com.furama.service.IAttachFacilityService;
+import com.furama.service.IContractDetailService;
 import com.furama.service.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,8 @@ public class AttachFacilityController {
     private IAttachFacilityService attachFacilityService;
     @Autowired
     private IContractService contractService;
+    @Autowired
+    private IContractDetailService contractDetailService;
 
     @GetMapping("/attach-facility")
     public ResponseEntity<List<AttachFacility>> getListAttachFacility(@RequestParam int idContract) {
@@ -42,12 +45,31 @@ public class AttachFacilityController {
         }
     }
 
-    @GetMapping("/total")
-    public ResponseEntity<Double> getTotal(@RequestParam("quality") int quality
-            , @RequestParam("attachFacilityId") int attachFacilityId
-            , @RequestParam("facilityId") int facilityId) {
 
-        return new ResponseEntity<>(attachFacilityService.getTotalMoneyAdd(quality
-                , attachFacilityId, facilityId), HttpStatus.OK);
+    @GetMapping("/addContractDetail")
+    public ResponseEntity addContractDetail(@RequestParam(defaultValue = "0") int quantity,
+                                            @RequestParam(defaultValue = "0") int attachFacilityId,
+                                            @RequestParam(defaultValue = "0") int contractId) {
+
+        ContractDetail contractDetail = new ContractDetail(quantity, contractService.findById(contractId),
+                attachFacilityService.findById(attachFacilityId));
+        contractDetailService.addContractDetail(contractDetail);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @GetMapping("/total")
+    public ResponseEntity<Double> getTotal(@RequestParam(value = "quantity", defaultValue = "0") int quantity,
+                                           @RequestParam(value = "attachFacilityId", defaultValue = "0") int attachFacilityId,
+                                           @RequestParam(value = "facilityId", defaultValue = "0") int facilityId) {
+        double total = 0;
+        if (quantity == 0) {
+            total=attachFacilityService.getCostFacility(facilityId);
+
+        }else {
+            total= attachFacilityService.getTotalMoneyAdd(quantity, attachFacilityId, facilityId);
+        }
+        return new ResponseEntity<>(total, HttpStatus.OK);
+
     }
 }
