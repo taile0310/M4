@@ -8,12 +8,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface IAttachFacilityRepository extends JpaRepository<AttachFacility, Integer> {
 
-    @Query(nativeQuery = true, value = "select f.cost + (af.cost * :quantity) from `facility` f" +
-            "join `attach_facility` af where f.id = :facility and af.id = :attachFacility")
-
+    @Query(nativeQuery = true, value = "select fc.cost + (af.cost * :quantity) from facility fc \n " +
+            "join attach_facility af where fc.id = :facilityId and af.id = :attachFacilityId"
+    )
     double getTotalMoneyAdd(@Param("quantity") int quantity
-            , @Param("attachFacility") int attachFacility
-                , @Param("facility") int facility);
+            , @Param("attachFacilityId") int attachFacility
+                , @Param("facilityId") int facility);
 
     @Query(nativeQuery = true, value = "select facility.cost from facility where facility.id = :facilityId")
     double getCostFacility(@Param("facilityId") int facilityId);

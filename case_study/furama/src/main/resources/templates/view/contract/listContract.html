@@ -107,7 +107,7 @@
             </div>
             <div class="modal-body">
                 <table>
-                    <h4>Hợp đồng chi tiết</h4>
+                    <h4>Thêm hợp đồng chi tiết</h4>
                     <tr>
                         <td>
                             <select id="attachFacility"></select>
@@ -223,10 +223,7 @@
                         </tr>
                     </table>
                     <div class="modal-footer">
-<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"-->
-<!--                                th:attr="onclick=|onCloseModal()|">Đóng-->
-<!--                        </button>-->
-                        <button type="submit" class="btn btn-primary" >Thêm hợp đồng</button>
+                        <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Thêm hợp đồng</button>
                     </div>
                 </form>
             </div>
@@ -234,7 +231,7 @@
     </div>
 </div>
 
-<!--MODAL ADD DỊCH VỤ ĐI TRONG THÊM MỚI HỢP ĐỒNG-->
+<!--MODAL ADD DỊCH VỤ ĐI KÈM TRONG THÊM MỚI HỢP ĐỒNG-->
 <div class="modal fade" id="exampleModalAdd2" tabindex="-1"
      aria-labelledby="exampleModalLabelAdd2" aria-hidden="true">
     <div class="modal-dialog">
@@ -245,16 +242,17 @@
             </div>
             <div class="modal-body">
                 <table>
+                    <h5>Chọn dịch vụ đi kèm</h5>
                     <tr>
                         <td>
-                            <select id="attachFacilityNew" ></select>
+                            <select id="attachFacilityNew" onchange="toTal()"></select>
                         </td>
                         <td><input type="number" placeholder="Nhập số lượng" id="quantityNew"></td>
                     </tr>
                 </table>
                 <div class="modal-footer">
                     <button onclick="getDataAttachFacilityOnModal()" type="button"
-                            class="btn btn-primary" data-bs-target="#exampleModalAdd" data-bs-toggle="modal" >Thêm</button>
+                            class="btn btn-primary" data-bs-target="#exampleModalAdd" data-bs-toggle="modal" >Chọn</button>
                 </div>
             </div>
         </div>
@@ -294,6 +292,7 @@
 </body>
 
 <div th:replace="~{furama :: footer}"></div>
+
 </html>
 
 <script>
@@ -306,6 +305,7 @@
 </script>
 
 <script>
+    // SHOW RA LIST DỊCH VỤ ĐI KÈM
     function viewAttachFacility(idContract) {
         $.ajax({
             type: "GET",
@@ -340,7 +340,6 @@
             url: "http://localhost:8080/api",
             success: function (data) {
                 console.log(data);
-
                 let content = '';
                 for (let i = 0; i < data.length; i++) {
 
@@ -360,7 +359,6 @@
         let quantity = parseInt(document.getElementById('quantity').value)
         let attachFacility = parseInt(document.getElementById('attachFacility').value)
         let contract = parseInt(document.getElementById('idContract').value)
-
         $.ajax({
             type: "GET",
             dataType: "json",
@@ -394,43 +392,56 @@
 </script>
 
 <script>
-    // SHOW RA LIST
+    // lẤY THÔNG TIN DỊCH VỤ ĐI KÈM GẮN LÊN MODAL ADD
     let listId = [];
     let listQuantity = [];
 
     function getDataAttachFacilityOnModal() {
-        let id = document.getElementById('attachFacilityNew').value;
-        let quantity = document.getElementById('quantityNew').value;
-        listId.push(id);
-        listQuantity.push(quantity);
+        let idAttachFacility = document.getElementById('attachFacilityNew').value;
+        let quantityAttachFacility = document.getElementById('quantityNew').value;
+        listId.push(idAttachFacility);
+        listQuantity.push(quantityAttachFacility);
         console.log(listId.toString())
         document.getElementById('listAttachFacility').value = listId.toString();
         document.getElementById('listQuantity').value = listQuantity.toString();
-      toTal()
+        toTal()
     }
 </script>
 
 <script>
-
+// TÍNH TỔNG TIỀN
     let total = 0;
-
+    let dangchọndichvu = true;
+    let giadichvu = 0;
     function toTal() {
-        let quantity = 0;
-        let attachFacility = 0;
+        let quantity = document.getElementById('quantityNew').value;
+        let idAttach = document.getElementById('attachFacilityNew').value;
         // luôn luôn lúc nào cũng có cost
-        let facility = parseInt(document.getElementById('facility').value);
-        if (!isNaN(parseInt(document.getElementById('attachFacility').value))){
-            quantity = parseInt(document.getElementById('quantity').value);
-            attachFacility = parseInt(document.getElementById('attachFacility').value);
+        let facilityId = parseInt(document.getElementById('facility').value);
+        if (!isNaN(parseInt(document.getElementById('attachFacilityNew').value))){
+            // vì có id của dich vụ đi kèm nên chạy đc vào đây
+            dangchọndichvu = false;
+            quantity = parseInt(document.getElementById('quantityNew').value);
+            idAttach = parseInt(document.getElementById('attachFacilityNew').value);
         }
-        console.log(quantity + "thbthnh" )
-
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "http://localhost:8080/api/total?quantity=" + quantity + "&&attachFacilityId=" + attachFacility + "&&facilityId=" + facility,
+            url: "http://localhost:8080/api/total?quantity=" + quantity + "&&attachFacilityId=" + idAttach + "&&facilityId=" + facilityId,
             success: function (data) {
-                total += data
+                if (dangchọndichvu) {
+                    // trừ giá dịch vụ thêm lúc trc
+                    total -= giadichvu
+                    giadichvu = data;
+                    total += giadichvu
+                } else {
+                     // vì phương thức này nó tính tổng cả dịch vụ nữa nên mỗi lần ấn nó tính tổng hết cộng với cái cũ
+                     total -= giadichvu
+                    total += data
+                }
+                // không gắn bằng null nó vẫn giữ giá trị ( id của dich vụ đi kèm , quantity)
+                document.getElementById('attachFacilityNew').value = null;
+                document.getElementById('quantityNew').value = null;
                 document.getElementById('total').value = total;
             }
         })
