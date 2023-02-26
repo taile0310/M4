@@ -11,7 +11,7 @@
 <body>
 <!--<div th:replace="~{furama :: navbar}"></div>-->
 <!--    navbar-->
-<div class="row" id="bgnavbar" >
+<div class="row" id="bgnavbar">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -123,40 +123,82 @@
             </div>
             <div class="modal-body">
                 <form th:action="@{/customer/save}" method="post" th:object="${customerDto}">
-                    <fieldset>
-                        <legend>Thêm Khách Hàng</legend>
-                        Tên Khách Hàng: <input type="text" th:field="*{name}"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-                        <br/>
-                        Ngày sinh: <input type="date" th:field="*{dateOfBirth}"/>
-                        <br/>
-                        Giới tính: <select th:field="*{gender}">
-                        <option th:value="true">
-                            Nam
-                        </option>
-                        <option th:value="false">
-                            Nữ
-                        </option>
-                    </select>
-                        <br/>
-                        Thẻ căn cước: <input type="text" th:field="*{idCard}"/>
-                        <br/>
-                        Số điện thoại: <input type="text" th:field="*{phoneNumber}"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
-                              th:errors="*{phoneNumber}"></span>
-                        <br/>
-                        Email: <input type="text" th:field="*{email}"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('email')}"
-                              th:errors="*{email}"></span>
-                        <br/>
-                        Địa chỉ: <input type="text" th:field="*{address}"/>
-                        <br/>
-                        Loại khách hàng: <select th:field="*{customerType}">
-                        <option th:each="listCustomerType: ${getShowListCustomerType}"
-                                th:text="${listCustomerType.getName()}"
-                                th:value="${listCustomerType.getId()}"></option>
-                    </select>
-                    </fieldset>
+                    <table>
+                        <center><h5>Thêm Khách Hàng</h5></center>
+                        <tr>
+                            <td>Tên Khách Hàng:</td>
+                            <td>
+                                <input type="text" th:field="*{name}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('name')}"
+                                      th:errors="*{name}">
+
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ngày sinh:</td>
+                            <td>
+                                <input type="date" th:field="*{dateOfBirth}"/>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Giới tính:</td>
+                            <td>
+                                <select th:field="*{gender}">
+                                    <option th:value="true">
+                                        Nam
+                                    </option>
+                                    <option th:value="false">
+                                        Nữ
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thẻ căn cước:</td>
+                            <td>
+                                <input type="text" th:field="*{idCard}"/>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại:</td>
+                            <td>
+                                <input type="text" th:field="*{phoneNumber}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
+                                      th:errors="*{phoneNumber}">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>
+                                <input type="text" th:field="*{email}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('email')}"
+                                      th:errors="*{email}">
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ:</td>
+                            <td>
+                                <input type="text" th:field="*{address}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Loại khách hàng:</td>
+                            <td>
+                                <select th:field="*{customerType}">
+                                    <option th:each="listCustomerType: ${getShowListCustomerType}"
+                                            th:text="${listCustomerType.getName()}"
+                                            th:value="${listCustomerType.getId()}">
+
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                 th:attr="onclick=|onCloseModal()|">Đóng
@@ -184,43 +226,78 @@
 
                 <form th:action="@{/customer/update}" method="post" th:object="${customerDto}">
 
-                    <fieldset>
-                        <legend>Sửa Thông Tin Khách Hàng</legend>
+                    <table>
+                        <center><h5>Sửa Thông Tin Khách Hàng</h5></center>
                         <input th:field="*{id}" hidden id="updateId">
-                        Tên Khách Hàng: <input type="text" th:field="*{name}" id="updateName"/>
+                        <tr>
+                            <td>Tên Khách Hàng:</td>
+                            <td>
+                                <input type="text" th:field="*{name}" id="updateName"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ngày sinh:</td>
+                            <td>
+                                <input type="date" th:field="*{dateOfBirth}" id="updateBirthOfDay"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Giới tính: </td>
+                            <td>
+                                <select th:field="*{gender}" id="updateGender">
+                                    <option th:value="true">
+                                        Nam
+                                    </option>
+                                    <option th:value="false">
+                                        Nữ
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thẻ căn cước:</td>
+                            <td>
+                                <input type="text" th:field="*{idCard}" id="updateIdCard"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('idCard')}"
+                                      th:errors="*{idCard}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Số điện thoại:</td>
+                            <td>
+                                <input type="text" th:field="*{phoneNumber}" id="updatePhoneNumber"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
+                                      th:errors="*{phoneNumber}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td>
+                                <input type="text" th:field="*{email}" id="updateEmail"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('email')}"
+                                      th:errors="*{email}"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Địa chỉ:</td>
+                            <td>
+                                <input type="text" th:field="*{address}" id="updateAddress"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Loại khách hàng:</td>
+                            <td>
+                                <select th:field="*{customerType}" id="updateCustomerType">
+                                    <option th:each="listCustomerType: ${getShowListCustomerType}"
+                                            th:text="${listCustomerType.getName()}"
+                                            th:value="${listCustomerType.getId()}">
 
-                        <span style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-                        <br/>
-                        Ngày sinh: <input type="date" th:field="*{dateOfBirth}" id="updateBirthOfDay"/>
-                        <br/>
-                        Giới tính: <select th:field="*{gender}" id="updateGender">
-                        <option th:value="true">
-                            Nam
-                        </option>
-                        <option th:value="false">
-                            Nữ
-                        </option>
-                    </select>
-                        <br/>
-                        Thẻ căn cước: <input type="text" th:field="*{idCard}" id="updateIdCard"/>
-                        <br/>
-                        Số điện thoại: <input type="text" th:field="*{phoneNumber}" id="updatePhoneNumber"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('phoneNumber')}"
-                              th:errors="*{phoneNumber}"></span>
-                        <br/>
-                        Email: <input type="text" th:field="*{email}" id="updateEmail"/>
-                        <span style="color: red" th:if="${#fields.hasErrors('email')}"
-                              th:errors="*{email}"></span>
-                        <br/>
-                        Địa chỉ: <input type="text" th:field="*{address}" id="updateAddress"/>
-                        <br/>
-                        Loại khách hàng: <select th:field="*{customerType}" id="updateCustomerType">
-                        <option th:each="listCustomerType: ${getShowListCustomerType}"
-                                th:text="${listCustomerType.getName()}"
-                                th:value="${listCustomerType.getId()}"></option>
-                        >
-                    </select>
-                    </fieldset>
+                                    </option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
                                 th:attr="onclick=|onCloseModal()|">Đóng

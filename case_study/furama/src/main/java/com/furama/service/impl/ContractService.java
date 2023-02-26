@@ -7,11 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ContractService implements IContractService {
     @Autowired
-    private IContractRepository  contractRepository;
+    private IContractRepository contractRepository;
 
     @Override
     public Page<Contract> findAll(Pageable pageable) {
@@ -24,7 +25,9 @@ public class ContractService implements IContractService {
     }
 
     @Override
+
     public void deleteContract(int id) {
+
         contractRepository.deleteById(id);
 
     }

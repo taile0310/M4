@@ -21,7 +21,7 @@ public class AttachFacility {
     @NotNull
     @Column(length = 45)
     private String status;
-@JsonBackReference
+    @JsonBackReference
     @OneToMany(mappedBy = "attachFacility")
     private Set<ContractDetail> contractDetailSet;
 

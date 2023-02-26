@@ -6,16 +6,27 @@ import com.furama.model.employee.Position;
 import com.furama.model.login.User;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 public class EmployeeDto {
     private int id;
     @NotEmpty(message = "Tên nhân viên không được để trống")
+    @Pattern(regexp = "^[A-Z][a-z]*([ ][A-Z][a-z]*)*$", message = "Tên không được chứa số và chữ cái đầu phải viết hoa")
     private String name;
     private String dateOfBirth;
+    @NotEmpty(message = "Căn cước không được để trống")
+//    (?:\d{9}|\d{12}): nhóm bao gồm 2 pattern: 9 số hoặc 12 số.
+    @Pattern(regexp = "^(?:\\d{9}|\\d{12})$", message = "Căn cước không được ngắn và dài hơn 9 số hoặc 12 số")
     private String idCard;
+    @Positive(message = "Lương không được âm")
     private double salary;
     @NotEmpty(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "(((\\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\\b", message = "Số điện thoại chưa đúng định dạng")
     private String phoneNumber;
+    @NotEmpty(message = "Email không được để trống")
+    @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Email chưa đúng định dạng")
     private String email;
     private String address;
     private User username;
@@ -24,6 +35,7 @@ public class EmployeeDto {
     private Division division;
 
     public EmployeeDto() {
+
     }
 
     public int getId() {

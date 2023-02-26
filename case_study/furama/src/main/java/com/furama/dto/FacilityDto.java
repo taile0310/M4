@@ -4,21 +4,27 @@ import com.furama.model.facility.FacilityType;
 import com.furama.model.facility.RentType;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 
 public class FacilityDto {
     private int id;
     @NotEmpty(message = "Tên không đuợc để trống")
+    @Pattern(regexp = "^[A-Z][a-z]*([ ][A-Z-Z0-9][a-z-z0-9]*)*$", message = " Tên dịch vụ phải viết hoa chữ cái đầu tiên và phải có số")
     private String name;
+    @Positive( message = "Diện tích không được âm")
     private int area;
+    @Positive(message = "Giá không được âm")
     private double cost;
+    @Positive(message = " Số người là số nguyên dương")
     private int maxPeople;
     private String standardRoom;
     private String descriptionOtherConvenience;
+    @Positive(message = " Diện tích hồ bơi là số dương")
     private double poolArea;
-
+    @Positive(message = " Số tầng phải là số dương")
     private int numberOfFloor;
     private String facilityFree;
-
     private RentType rentType;
     private FacilityType facilityType;
 

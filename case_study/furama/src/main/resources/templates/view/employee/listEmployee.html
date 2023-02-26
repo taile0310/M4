@@ -123,12 +123,16 @@
                             <td>Căn cước</td>
                             <td>
                                 <input type="number" th:field="*{idCard}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('idCard')}"
+                                      th:errors="*{idCard}"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>Lương</td>
                             <td>
-                                <input type="text" th:field="*{salary}"/>;
+                                <input type="text" th:field="*{salary}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('salary')}"
+                                      th:errors="*{salary}"></span>
                             </td>
                         </tr>
                         <tr>
@@ -143,6 +147,8 @@
                             <td>Email</td>
                             <td>
                                 <input type="text" th:field="*{email}"/>
+                                <span style="color: red" th:if="${#fields.hasErrors('email')}"
+                                      th:errors="*{email}"></span>
                             </td>
                         </tr>
                         <tr>
@@ -151,7 +157,14 @@
                         </tr>
                         <tr>
                             <td>Tài khoản</td>
-                            <td><input type="text" th:field="*{username}"></td>
+                            <td>
+                                <select th:field="*{username}">
+                                    <option th:each="user: ${userService}"
+                                            th:text="${user.getUsername()}"
+                                            th:value="${user.getUsername()}">
+                                    </option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td>Chức vụ</td>

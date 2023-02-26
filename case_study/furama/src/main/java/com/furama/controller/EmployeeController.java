@@ -44,7 +44,7 @@ public class EmployeeController {
         model.addAttribute("divisionService", divisionService.listDivision());
         model.addAttribute("userService", userService.getListUser());
         model.addAttribute("employeeDto", new EmployeeDto());
-        return "/view/employee/listEmployee";
+        return "view/employee/listEmployee";
     }
 
     @PostMapping("/save")
@@ -63,7 +63,7 @@ public class EmployeeController {
             model.addAttribute("divisionService", divisionService.listDivision());
             model.addAttribute("userService", userService.getListUser());
             model.addAttribute("hasErr", "true");
-            return "/view/employee/listEmployee";
+            return "view/employee/listEmployee";
         }
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);

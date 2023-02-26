@@ -3,6 +3,8 @@ package com.furama.model.contract;
 import com.furama.model.customer.Customer;
 import com.furama.model.employee.Employee;
 import com.furama.model.facility.Facility;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 import javax.persistence.*;
@@ -30,8 +32,8 @@ public class Contract {
     private double total;
 
     @OneToMany(mappedBy = "contract")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<ContractDetail> contractDetailSet;
-
 
     public Contract() {
     }

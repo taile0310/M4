@@ -87,5 +87,13 @@ public class ContractController {
         }
     }
 
+    @PostMapping("/delete")
+    public String deleteContract(@RequestParam int id,RedirectAttributes redirectAttributes){
+        contractService.deleteContract(id);
+        redirectAttributes.addFlashAttribute("mess", "Xóa hợp đồng thành công");
+        return "redirect:/contract";
+
+    }
+
 
 }

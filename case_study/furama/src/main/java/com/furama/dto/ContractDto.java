@@ -1,10 +1,18 @@
 package com.furama.dto;
 
+import com.furama.model.contract.Contract;
 import com.furama.model.customer.Customer;
 import com.furama.model.employee.Employee;
 import com.furama.model.facility.Facility;
 
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.Valid;
+import javax.validation.Validator;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
+import java.time.LocalDateTime;
 
 public class ContractDto {
     private int id;
@@ -12,12 +20,11 @@ public class ContractDto {
     private String startDay;
     @NotEmpty(message = "Ngày trả không được để trống")
     private String endDay;
+    @Positive(message = "Tiền  không được âm")
     private double deposit;
-//    @NotEmpty(message = "Tên nhân viên không được để trống")
     private Employee employee;
-//    @NotEmpty(message = "Tên khách hàng không được để trống")
+
     private Customer customer;
-//    @NotEmpty(message = "Tên cơ sở không được để trống")
     private Facility facility;
 
     private double total;
@@ -88,4 +95,22 @@ public class ContractDto {
     public void setTotal(double total) {
         this.total = total;
     }
+
+//    @Override
+//    public boolean isValid(ContractDto contractDto, ConstraintValidatorContext context) {
+//        LocalDateTime startDay = LocalDateTime.parse(contractDto.getStartDay());
+//        LocalDateTime endDay = LocalDateTime.parse(contractDto.getEndDay());
+//        if (endDay == null) {
+//            return true;
+////            không cần kiểm tra nếu ngày trả phòng không có
+//        }
+//        boolean isAfter = endDay.isAfter(startDay);
+//        if (!isAfter ) {
+//            context.buildConstraintViolationWithTemplate("Ngày trả phòng phải lớn hơn ngày đặt phòng")
+//                    .addPropertyNode("endDay")
+//                    .addConstraintViolation();
+//
+//        }
+//        return isAfter ;
+//    }
 }
