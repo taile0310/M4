@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.css">
+</head>
+<body>
+<center><h1>DANH SÁCH TÁC PHẨM</h1></center>
+<marquee th:text="${thongBao}"></marquee>
+<div>
+    <div class="d-flex justify-content-start">
+        <a th:href="@{/form}" class="btn btn-success" >Thêm Tác Phẩm</a>
+    </div>
+    <div class="d-flex justify-content-end">
+        <form th:action="@{/}" method="get" class="d-flex" role="search">
+            <input type="text" name="tenTacPham" th:value="${tenTacPham}">
+            <button class="btn btn-outline-success">Tìm kiếm</button>
+        </form>
+    </div>
+</div>
+<table class=" table table-view table-bordered">
+    <tr>
+        <th>STT</th>
+        <th>Tên Tác Phẩm</th>
+        <th>Họa Sĩ</th>
+        <th>Năm Vẽ</th>
+        <th>Kích Thước</th>
+        <th>Thể Loại</th>
+        <th>Xóa</th>
+    </tr>
+    <tr th:each="tacPham : ${tacPhamTranhService}">
+        <td th:text="${tacPham.maSo}"></td>
+        <td th:text="${tacPham.tenTacPham}"></td>
+        <td th:text="${tacPham.hoaSi}"></td>
+        <td th:text="${tacPham.namVe}"></td>
+        <td th:text="${tacPham.kichThuoc}"></td>
+        <td th:text="${tacPham.theLoai.getTenTheLoai()}"></td>
+        <td>
+            <button th:attr="onclick=|xoaTacPham('${tacPham.maSo}','${tacPham.tenTacPham}')|"
+                    type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalDelete"
+                    data-bs-whatever="@mdo">Xóa
+            </button>
+        </td>
+    </tr>
+</table>
+</body>
+<!--MODAL DELETE-->
+<div class="modal fade" id="exampleModalDelete" tabindex="-1" aria-labelledby="exampleModalLabelDelete"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabelDelete">Xóa sản phẩm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:action="@{/delete}" method="post">
+                <div class="modal-body">
+                    <input hidden type="text" name="maSo" id="xoaMaSo">
+                    <span>Bạn có muốn xóa tác phẩm </span>
+                    <span style="color:red" id="xoaTenTacPham"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Xóa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function xoaTacPham(maSo, tenTacPham){
+        document.getElementById('xoaMaSo').value = maSo;
+        document.getElementById('xoaTenTacPham').innerText= tenTacPham;
+    }
+</script>
+</html>
+    <script src="bootstrap-5.1.3/js/bootstrap.bundle.js"></script>

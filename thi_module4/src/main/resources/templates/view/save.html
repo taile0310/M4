@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap-5.1.3/css/bootstrap.css">
+</head>
+<body>
+<form th:action="@{/save}" method="post" th:object="${tacPhamTranhDto}">
+    <center>
+        <h1>Thêm Tác Phẩm</h1>
+        <table>
+            <tr>
+                <td>Tên Tác Phẩm</td>
+                <td>
+                    <input type="text" th:field="*{tenTacPham}"/>
+                    <div>
+                        <span th:errors="*{tenTacPham}" th:if="${#fields.hasErrors('tenTacPham')}"
+                              style="color: red"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Họa Sĩ</td>
+                <td>
+                    <input type="text" th:field="*{hoaSi}"/>
+                    <div>
+                        <span th:errors="*{hoaSi}" th:if="${#fields.hasErrors('hoaSi')}"
+                              style="color: red"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Năm Vẽ</td>
+                <td>
+                    <input type="text" th:field="*{namVe}">
+                    <div>
+                        <span th:errors="*{namVe}" th:if="${#fields.hasErrors('namVe')}"
+                              style="color: red"></span>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Kích Thước</td>
+                <td>
+                    <input type="text" th:field="*{kichThuoc}">
+                    <div>
+                        <span th:errors="*{kichThuoc}" th:if="${#fields.hasErrors('kichThuoc')}"
+                        style="color: red">
+
+                        </span>
+
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Thể loại</td>
+                <td>
+                    <select th:field="*{theLoai}">
+                        <option th:each="theLoai : ${theLoaiService}"
+                                th:text="${theLoai.getTenTheLoai()}"
+                                th:value="${theLoai.getMaSo()}">
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-success">Thêm</button>
+                </td>
+                <td>
+                    <a th:href="@{/}" class="btn btn-info" type="button">Quay lại</a>
+                </td>
+            </tr>
+        </table>
+    </center>
+</form>
+</body>
+</html>
+<script src="bootstrap-5.1.3/js/bootstrap.bundle.js"></script>
