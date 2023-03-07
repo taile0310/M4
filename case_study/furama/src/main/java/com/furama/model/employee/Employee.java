@@ -26,7 +26,7 @@ public class Employee {
     private String email;
     @Column(length = 45)
     private String address;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "username", referencedColumnName = "username")
     private User username;
     @ManyToOne

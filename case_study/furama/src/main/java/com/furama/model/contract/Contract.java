@@ -31,8 +31,7 @@ public class Contract {
 
     private double total;
 
-    @OneToMany(mappedBy = "contract")
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "contract", cascade = CascadeType.REMOVE)
     private Set<ContractDetail> contractDetailSet;
 
     public Contract() {

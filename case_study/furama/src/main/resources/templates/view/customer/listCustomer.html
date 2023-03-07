@@ -131,7 +131,6 @@
                                 <input type="text" th:field="*{name}"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('name')}"
                                       th:errors="*{name}">
-
                                 </span>
                             </td>
                         </tr>
@@ -139,7 +138,6 @@
                             <td>Ngày sinh:</td>
                             <td>
                                 <input type="date" th:field="*{dateOfBirth}"/>
-
                             </td>
                         </tr>
                         <tr>
@@ -193,7 +191,6 @@
                                     <option th:each="listCustomerType: ${getShowListCustomerType}"
                                             th:text="${listCustomerType.getName()}"
                                             th:value="${listCustomerType.getId()}">
-
                                     </option>
                                 </select>
                             </td>

@@ -31,7 +31,7 @@ public class Facility {
     @ManyToOne
     @JoinColumn(name = "facilityType_id", referencedColumnName = "id")
     private FacilityType facilityType;
-    @OneToMany(mappedBy = "facility")
+    @OneToMany(mappedBy = "facility",cascade = CascadeType.REMOVE)
     private Set<Contract> contractSet;
 
 

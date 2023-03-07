@@ -89,7 +89,7 @@
             </button>
         </td>
         <td>
-            <button th:attr="onclick=|idDelete('${contract.id}','${contract.employee}')|"
+            <button th:attr="onclick=|idDelete('${contract.id}','${contract.employee.getName()}')|"
                     type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                     data-bs-target="#exampleModalDelete"
                     data-bs-whatever="@mdo">Xóa
@@ -118,7 +118,7 @@
                 <div class="modal-body">
                     <input hidden type="text" id="deleteId" name="id">
                     <span>Bạn có muốn xóa hợp đồng được tạo bới nhân viên</span>
-                    <span style="color:red" id="deleteNameEmployee" 3></span>
+                    <span style="color:red" id="deleteNameEmployee"></span>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -336,6 +336,8 @@
     // DELETE
     function idDelete(id, employee) {
         document.getElementById("deleteId").value = id;
+        console.log(employee.id)
+        console.log(employee.name)
         document.getElementById("deleteNameEmployee").innerText = employee;
     }
 </script>
@@ -423,6 +425,7 @@
                 $('#attachFacilityNew').html(content);
 
             }
+
         })
     }
 </script>

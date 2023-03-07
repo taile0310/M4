@@ -23,10 +23,8 @@ public class ContractDto {
     @Positive(message = "Tiền  không được âm")
     private double deposit;
     private Employee employee;
-
     private Customer customer;
     private Facility facility;
-
     private double total;
 
     public ContractDto() {

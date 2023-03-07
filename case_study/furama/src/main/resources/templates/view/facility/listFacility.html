@@ -205,7 +205,6 @@
                                       th:errors="*{numberOfFloor}"></span>
                             </td>
                         </tr>
-
                         <tr id="facilityFree">
                             <td>Dịch vụ miễn phí</td>
                             <td>
@@ -277,7 +276,7 @@
                         <tr>
                             <td>Diện tích:</td>
                             <td>
-                                <input type="date" th:field="*{area}" id="updateArea"/>
+                                <input type="number" th:field="*{area}" id="updateArea"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('area')}"
                                       th:errors="*{area}"></span>
                             </td>
@@ -293,7 +292,7 @@
                         <tr>
                             <td>Số người:</td>
                             <td>
-                                <input type="text" th:field="*{maxPeople}" id="updateMaxPeople"/>
+                                <input type="number" th:field="*{maxPeople}" id="updateMaxPeople"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('maxPeople')}"
                                       th:errors="*{maxPeople}"></span>
                             </td>
@@ -314,7 +313,7 @@
                         <tr>
                             <td>Diện tích hồ bơi:</td>
                             <td>
-                                <input type="text" th:field="*{poolArea}" id="updatePoolArea"/>
+                                <input type="number" th:field="*{poolArea}" id="updatePoolArea"/>
                                 <span style="color: red" th:if="${#fields.hasErrors('poolArea')}"
                                       th:errors="*{poolArea}"></span>
                             </td>
@@ -347,12 +346,7 @@
                         <tr>
                             <td>Loại cơ sở:</td>
                             <td>
-                                <select th:field="*{facilityType}" id="updateFacilityType">
-                                    <option th:each="facilityType: ${getListFacilityType}"
-                                            th:text="${facilityType.getName()}"
-                                            th:value="${facilityType.getId()}">
-                                    </option>
-                                </select>
+                                <input th:field="${facilityType}" id="updateFacilityType" readonly>
                             </td>
                         </tr>
                     </table>

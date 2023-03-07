@@ -53,6 +53,8 @@ public class CustomerController {
                                  RedirectAttributes redirectAttributes, Model model,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
+                                 @RequestParam(required = false, defaultValue = "0") int customerTypeSearch,
+
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable) {
         Page<Customer> customerPage = customerService.customerPage(nameSearch, emailSearch, pageable);
@@ -61,6 +63,7 @@ public class CustomerController {
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
             model.addAttribute("customerDto", customerDto);
+            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
             model.addAttribute("hasErr", "true");
             return "view/customer/listCustomer";
@@ -76,6 +79,7 @@ public class CustomerController {
     public String updateCustomer(@Validated @ModelAttribute CustomerDto customerDto, BindingResult bindingResult, Customer customer,
                                  @RequestParam(required = false, defaultValue = "") String nameSearch,
                                  @RequestParam(required = false, defaultValue = "") String emailSearch,
+                                 @RequestParam(required = false, defaultValue = "0") int customerTypeSearch,
                                  @PageableDefault(size = 3, page = 0, sort = "id",
                                          direction = Sort.Direction.ASC) Pageable pageable,
                                  RedirectAttributes redirectAttributes, Model model) {
@@ -84,6 +88,7 @@ public class CustomerController {
             model.addAttribute("customerPage", customerPage);
             model.addAttribute("name", nameSearch);
             model.addAttribute("email", emailSearch);
+            model.addAttribute("customerTypeSearch", customerTypeSearch);
             model.addAttribute("customerDto", customerDto);
             model.addAttribute("getShowListCustomerType", customerTypeService.getListCustomerType());
             model.addAttribute("hasError", "true");
